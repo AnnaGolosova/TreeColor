@@ -41,5 +41,20 @@ namespace TreeColor.Controllers
 
             return View();
         }
+
+        public JsonResult PutResult(Results res)
+        {
+            try
+            {
+                DBcontext.Results.Add(res);
+                DBcontext.Entry(res).State = System.Data.Entity.EntityState.Added;
+                DBcontext.SaveChanges();
+                return Json(true);
+            }
+            catch(Exception e)
+            {
+                return Json(false);
+            }
+        }
     }
 }
