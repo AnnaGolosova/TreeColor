@@ -11,8 +11,15 @@ namespace TreeColor.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.CurrentTest = (Tests)Session["CurrentTest"];
-            ViewBag.Tests = DBcontext.Tests.AsNoTracking().ToList();
+            try
+            {
+                ViewBag.CurrentTest = (Tests)Session["CurrentTest"];
+                ViewBag.Tests = DBcontext.Tests.AsNoTracking().ToList();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+            }
             return View();
         }
 

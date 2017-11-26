@@ -22,27 +22,27 @@
             <canvas id="canvas" onclick="press()" width="1200" height="475"></canvas>
         </div>
         <script>
-            var count = 0;
-            var i = 0;
+
             var allIsGood = false;
+            var i = 0;
+            var count = 0;
             var canvas = document.getElementById('canvas');
-            canvas.width = document.getElementByClass("divv").width;
-            canvas.height = document.getElementByClass("divv").height;
             var context = canvas.getContext('2d');
             var currX = Math.random() * canvas.width + 50;
             var currY = Math.random() * canvas.height + 50;
+            var fps = 50;
 
             function Drawing()
             {
-                var fps = 50;
                 var timer = setInterval(function () {
                     if(allIsGood)
                     {
                         context.beginPath();
-                        context.arc(currX, currY, i++, 0, 2 * Math.PI, false);
-                        context.fillStyle = '#FFFFFF';
+                        context.arc(currX, currY, i, 0, 2 * Math.PI, false);
+                        context.fillStyle = '#000000';
                         context.fill();
                         context.stroke();
+                        i++;
                     }
                     else
                     {
@@ -50,7 +50,9 @@
                     }
                 }, 1000 / fps)
             }
-            function press() {  
+
+            function press() 
+            {  
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 
                 var Result = {
@@ -73,6 +75,7 @@
                 currX = Math.random() * 500 + 100;
                 currY = Math.random() * 150 + 50;
             }
+
             function successFunc(data, status) {
                 if(data == true)
                 {
@@ -81,12 +84,10 @@
                 else
                 {
                     StartTesting()
-                    alert(data);
                 }
             }
 
             function errorFunc(errorData) {
-                alert('Ошибка' + errorData.responseText);
                 StartTesting()
             }
 
