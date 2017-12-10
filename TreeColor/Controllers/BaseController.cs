@@ -10,11 +10,14 @@ namespace TreeColor.Controllers
     public class BaseController : Controller
     {
         public static SettingsTestEntities DBcontext;
+        public static UserDbContext UserDB;
 
-        public BaseController()
+        static BaseController()
         {
-            if(DBcontext == null)
+            if (DBcontext == null)
                 DBcontext = new SettingsTestEntities();
+            if (UserDB == null)
+                UserDB = new UserDbContext();
         }
     }
 }

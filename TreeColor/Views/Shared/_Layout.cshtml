@@ -7,7 +7,14 @@
     </head>
     <body>
         <ul id="dropdown1" class="dropdown-content">
-            <li><a href="#!"><i class="material-icons left">settings</i>Settings</a></li>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li><a href="#!"><i class="material-icons left">settings</i>@User.Identity.Name</a></li>
+            }
+            else
+            {
+                <li><a href="#!"><i class="material-icons left">settings</i>Settings</a></li>
+            }
             <li class="divider"></li>
             <li><a href="#!"><i class="material-icons left">exit_to_app</i>Exit</a></li>
         </ul>
@@ -38,5 +45,6 @@
             @RenderBody()
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="~/Scripts/materialize.min.js"></script>
+        @RenderSection("Scripts", false)
     </body>
 </html>

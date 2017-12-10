@@ -18,16 +18,16 @@ namespace TreeColor.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class UserDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        public UserDbContext()
+            : base("NewString", throwIfV1Schema: false)
         {
         }
 
-        public static ApplicationDbContext Create()
+        public static UserDbContext Create()
         {
-            return new ApplicationDbContext();
+            return new UserDbContext();
         }
     }
 }

@@ -9,12 +9,22 @@ namespace TreeColor.Controllers
 {
     public class HomeController : BaseController
     {
-        public ActionResult Index()
+        [Authorize]
+        public ActionResult Index(bool showResults = false)
         {
             try
             {
                 ViewBag.CurrentTest = (Tests)Session["CurrentTest"];
                 ViewBag.Tests = DBcontext.Tests.AsNoTracking().ToList();
+                if(showResults)
+                {
+                    ViewBag.Result = DBcontext.Results
+                        .Where(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber))
+                        .Average(r => r.tim);
+                    ViewBag.Average = DBcontext.Results.Where(r => r.Points.testid == DBcontext.Results.Where(res => res.testingnumber == DBcontext.Results.Max(rr => rr.testingnumber)).FirstOrDefault().Points.testid).Average(r => r.tim);
+                    ViewBag.ErrorAmount = DBcontext.Results.Where(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber)).Count(r => r.error > 0);
+                }
+                ViewBag.TestingNumber = DBcontext.Results.Max(r => r.testingnumber) + 1;
             }
             catch (Exception ex)
             {
@@ -23,6 +33,7 @@ namespace TreeColor.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult ChangeTest(int id = 0)
         {
             if (id == 0)
@@ -34,6 +45,7 @@ namespace TreeColor.Controllers
             }
             return RedirectToAction("Index");
         }
+
 
         public ActionResult About()
         {
@@ -49,18 +61,30 @@ namespace TreeColor.Controllers
             return View();
         }
 
+        [Authorize]
         public JsonResult PutResult(Results res)
         {
             try
             {
+                int pointId = DBcontext.Tests.Where(t => t.id == res.userid).FirstOrDefault().Points.ToList()[(int)res.pointid].id;
+                res.pointid = pointId;
+                res.userid = null;
+                res.CDate = DateTime.Now;
+                if(User.Identity.IsAuthenticated)
+                {
+                    string userId = UserDB.Users.Where(nu => nu.UserName == User.Identity.Name).FirstOrDefault().Id;
+                    res.userid = DBcontext.Users.Where(u => String.Compare(u.NewId, userId) == 0).FirstOrDefault().id;
+                }
+
                 DBcontext.Results.Add(res);
                 DBcontext.Entry(res).State = System.Data.Entity.EntityState.Added;
                 DBcontext.SaveChanges();
+
                 return Json(true);
             }
             catch(Exception e)
             {
-                return Json(false);
+                return Json(e.Message);
             }
         }
     }
