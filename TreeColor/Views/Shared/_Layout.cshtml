@@ -6,18 +6,22 @@
         <script src="~/Scripts/jquery-3.2.1.js"></script>
     </head>
     <body>
-        <ul id="dropdown1" class="dropdown-content">
-            @if (User.Identity.IsAuthenticated)
-            {
-                <li><a href="#!"><i class="material-icons left">settings</i>@User.Identity.Name</a></li>
-            }
-            else
-            {
-                <li><a href="#!"><i class="material-icons left">settings</i>Settings</a></li>
-            }
-            <li class="divider"></li>
-            <li><a href="#!"><i class="material-icons left">exit_to_app</i>Exit</a></li>
-        </ul>
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+            <ul id="dropdown1" class="dropdown-content">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li><a href="#!"><i class="material-icons left">settings</i>@User.Identity.Name</a></li>
+                }
+                else
+                {
+                    <li><a href="#!"><i class="material-icons left">settings</i>Settings</a></li>
+                }
+                <li class="divider"></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="material-icons left">exit_to_app</i>Exit</a></li>
+            </ul>
+        }
         <ul id="dropdown2" class="dropdown-content">
             @using (Html.BeginForm("ChangeTest", "Home"))
             {

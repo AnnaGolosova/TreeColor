@@ -28,5 +28,19 @@ namespace TreeColor.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Results> Results { get; set; }
+
+        public Users(int age, string activity, string gender, string newId) : base()
+        {
+            Age = age;
+            Activity = activity;
+            Gender = gender;
+            NewId = newId;
+        }
+
+        public bool CompareTo(Users user)
+        {
+            return (string.Compare(user.Activity.ToLower(), Activity.ToLower()) == 0 && user.Age == Age && string.Compare(user.Gender.ToLower(), Gender.ToLower()) == 0);
+        }
+
     }
 }

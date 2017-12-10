@@ -1,63 +1,88 @@
 ﻿@using TreeColor.Models
-@model LoginViewModel
+@model Users
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Расскажите о себе";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
-
-<h2>@ViewBag.Title.</h2>
-<div class="row">
-    <div class="col-md-8">
+<div class="row" style="margin-top:100px;">
+    <div class="col s8 z-depth-5 offset-s2">
         <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", name = "MainForm" }))
             {
                 @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
+                <h4>@ViewBag.Title.</h4>
                 <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                <h5>Выберите род деятельности:</h5>
+                <div class="row">
+                    <div class="col s12">
+                        <ul class="tabs" style="height:100px;">
+                            <li class="tab col s3" style="line-height:inherit; height:inherit;"><a onclick="changeActivity(0)"><i class="material-icons medium">school</i><br />Школьник</a></li>
+                            <li class="tab col s3" style="line-height:inherit; height:inherit;"><a class="active" onclick="changeActivity(1)"><i class="material-icons medium">school</i><br />Студент</a></li>
+                            <li class="tab col s3" style="line-height:inherit; height:inherit;"><a onclick="changeActivity(2)"><i class="material-icons medium">work</i><br />Рабочий</a></li>
+                        </ul>
+                        <select hidden name="Activity">
+                            <option value="Школьник"></option>
+                            <option value="Студент"></option>
+                            <option value="Рабочий"></option>
+                        </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col s8">
+                        <h5 id="rangeLabel">Выберите возраст - 18</h5>
+                        <p class="range-field" onchange="RangeChange()">
+                            <input id="range" type="range" name="Age" min="5" max="80" value="18" />
+                        </p>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
+                    <div class="col s3 offset-s1">
+                        <h5 id="rangeLabel">Выберите пол</h5>
+                        <div class="switch">
+                            <label>
+                                <img src="~/Content/human-female.png" />
+                                <input type="checkbox" onchange="changeGender()">
+                                <span class="lever"></span>
+                                <img src="~/Content/human-male.png" />
+                            </label>
+                            <select hidden name="Gender">
+                                <option value="м"></option>
+                                <option value="ж"></option>
+                            </select>
                         </div>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
+                        <input type="submit" value="Начать тестирование" class="btn btn-default" />
                     </div>
                 </div>
-                <p>
-                    @Html.ActionLink("Register as a new user", "Register")
-                </p>
-                @* Enable this once you have account confirmation enabled for password reset functionality
-                    <p>
-                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>*@
             }
-        </section>
-    </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>
+            </section>
+        </div>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+<script type="text/javascript">
+    var select = document.forms.MainForm.elements.Activity;
+    select.selectedIndex = 1;
+    document.forms.MainForm.elements.Gender.selectedIndex = 1;
+
+    function changeActivity(Id)
+    {
+        select.selectedIndex = Id;
+    }
+
+    function RangeChange()
+    {
+        document.getElementById("rangeLabel").innerHTML = "Выберите возраст - " + document.getElementById("range").value;
+    }
+
+    function changeGender()
+    {
+        document.forms.MainForm.elements.Gender.selectedIndex = 
+            document.forms.MainForm.elements.Gender.selectedIndex == 0 ?
+            1 : 0;
+    }
+</script>

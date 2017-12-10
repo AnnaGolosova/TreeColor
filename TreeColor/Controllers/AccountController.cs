@@ -65,30 +65,45 @@ namespace TreeColor.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(Users model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
+            LoginViewModel user = new LoginViewModel();
+
+            ApplicationUser existsUser = null;
+            foreach(Users u in DBcontext.Users.ToList())
+                if(u.CompareTo(model))
+                {
+                    existsUser = UserManager.FindById(u.NewId);
+                }
+
+            if (existsUser == null)
+            {
+                string password = Guid.NewGuid().ToString() + "!A";
+
+                var newUser = new ApplicationUser { UserName = model.Activity + model.Age + model.Gender + "@gmail.com",
+                    Email = model.Activity + model.Age + model.Gender + "@gmail.com"
+                };
+                var newResult = await UserManager.CreateAsync(newUser, password);
+                DBcontext.Users.Add(new Users((int)model.Age, model.Activity, model.Gender, newUser.Id));
+                await DBcontext.SaveChangesAsync();
+                if (newResult.Succeeded)
+                {
+                    await SignInManager.SignInAsync(newUser, isPersistent: false, rememberBrowser: false);
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(newResult);
+            }
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
-            }
+            await SignInManager.SignInAsync(existsUser, true, true);
+            return RedirectToLocal(returnUrl);
         }
 
         //
@@ -392,7 +407,7 @@ namespace TreeColor.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         //
