@@ -17,7 +17,7 @@
                     <div class="col s12">
                         <ul class="tabs" style="height:100px;">
                             <li class="tab col s3" style="line-height:inherit; height:inherit;"><a onclick="changeActivity(0)"><i class="material-icons medium">school</i><br />Школьник</a></li>
-                            <li class="tab col s3" style="line-height:inherit; height:inherit;"><a class="active" onclick="changeActivity(1)"><i class="material-icons medium">school</i><br />Студент</a></li>
+                            <li class="tab col s3" style="line-height:inherit; height:inherit;"><a class="active" onclick="changeActivity(1)"><i class="material-icons medium">account_balance</i><br />Студент</a></li>
                             <li class="tab col s3" style="line-height:inherit; height:inherit;"><a onclick="changeActivity(2)"><i class="material-icons medium">work</i><br />Рабочий</a></li>
                         </ul>
                         <select hidden name="Activity">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="row">
                     <div class="col s8">
-                        <h5 id="rangeLabel">Выберите возраст - 18</h5>
+                        <h5 id="rangeLabel">Выберите возраст : 18</h5>
                         <p class="range-field" onchange="RangeChange()">
                             <input id="range" type="range" name="Age" min="5" max="80" value="18" />
                         </p>
@@ -38,10 +38,10 @@
                         <h5 id="rangeLabel">Выберите пол</h5>
                         <div class="switch">
                             <label>
-                                <img src="~/Content/human-female.png" />
-                                <input type="checkbox" onchange="changeGender()">
+                                <img src="~/Content/human-female.png" onclick="SetFemale()"/>
+                                <input type="checkbox" onclick="changeGender()">
                                 <span class="lever"></span>
-                                <img src="~/Content/human-male.png" />
+                                <img src="~/Content/human-male.png" onclick="SetMale()"/>
                             </label>
                             <select hidden name="Gender">
                                 <option value="м"></option>
@@ -76,7 +76,7 @@
 
     function RangeChange()
     {
-        document.getElementById("rangeLabel").innerHTML = "Выберите возраст - " + document.getElementById("range").value;
+        document.getElementById("rangeLabel").innerHTML = "Выберите возраст : " + document.getElementById("range").value;
     }
 
     function changeGender()
@@ -84,5 +84,13 @@
         document.forms.MainForm.elements.Gender.selectedIndex = 
             document.forms.MainForm.elements.Gender.selectedIndex == 0 ?
             1 : 0;
+    }
+
+    function SetMale() {
+        document.forms.MainForm.elements.Gender.selectedIndex = 0;
+    }
+
+    function SetFemale() {
+        document.forms.MainForm.elements.Gender.selectedIndex = 1;
     }
 </script>

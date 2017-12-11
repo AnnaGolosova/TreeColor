@@ -1,0 +1,147 @@
+﻿@model TreeColor.Models.Tests
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="row" style="margin-top:75px;">
+    <div class="col s8 z-depth-5 offset-s2">
+        @using (Html.BeginForm())
+        {
+            <div class="row">
+                <h4>Настройки теста</h4>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="last_name" type="text" class="validate">
+                    <label for="last_name">Название теста</label>
+                </div>
+                <div class="input-field col s2">
+                    <label for="field_color">Цвет фона</label>
+                </div>
+                <div class="input-field col s4">
+                    <input class="jscolor" value="ab2567" id="field_color">
+                </div>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <div class="col s1">
+                        <h5>Min</h5>
+                    </div>
+                    <div class="col s10 center-align">
+                        <h5>Интервал между появлением точек</h5>
+                    </div>
+                    <div class="col s1">
+                        <h5>Max</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s1">
+                        <h6>5</h6>
+                    </div>
+                    <div class="col s10">
+                        <div id="test-slider"></div>
+                    </div>
+                    <div class="col s1">
+                        <h6>50</h6>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col s4">
+                    <h4>Настройки точек</h4>
+                </div>
+                <div class="input-field col s2 offset-s1">
+                    <input id="pointsCol" type="number">
+                    <label for="pointsCol">Количество точек</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s3">
+                    <div class="input-field">
+                        <input id="pointsCol" type="number">
+                        <label for="pointsCol">Начальный радиус</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="pointsCol" type="text">
+                        <label for="pointsCol">Скорость роста</label>
+                    </div>
+                    <div class="input-field">
+                        <a class="waves-effect waves-light btn">Показать</a>
+                    </div>
+                </div>
+                <div class="col s8 offset-s1">
+                    <div class="row">
+                        <div class="col s3">
+                            <h5>Клавиша</h5>
+                        </div>
+                        <div class="col s3 offset-s1">
+                            <h5>Цвет</h5>
+                        </div>
+                        <div class="col s4 offset-s1 ">
+                            <h5>Предпросмотр</h5>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col s3">
+                            <div class="input-field">
+                                <input name="edt1" type="text" class="validate keyField" data-length="1" onkeyup="KeyType(event)" onkeypress="KeyType(event)">
+                            </div>
+                        </div>
+                        <div class="col s3 offset-s1">
+                            <input class="jscolor" value="ab2567" id="field_color">
+                        </div>
+                        <div class="col s4 offset-s1 ">
+                            <canvas width="118" height="48"></canvas>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col s3">
+                            <div class="input-field">
+                                <input name="edt1" type="text" class="validate keyField" data-length="1" onkeyup="KeyType(event)" onkeypress="KeyType(event)">
+                            </div>
+                        </div>
+                        <div class="col s3 offset-s1">
+                            <input class="jscolor" value="ab2567" id="field_color">
+                        </div>
+                        <div class="col s4 offset-s1 ">
+                            <canvas width="118" height="48"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+
+    function KeyType(event)
+    {
+        event.currentTarget.value = event.key;
+    }
+
+    function edt1KeyDown(e) {
+        var edt1 = document.getElementById('edt1');
+        str += edt1.value;
+        edt1.value = '';
+
+        var edt2 = document.getElementById("edt2");
+        if (e.keyCode == 8) { // backspace
+            edt2.value = edt2.value.substring(0, edt2.value.length - 1);
+        }
+    }
+
+    var slider = document.getElementById('test-slider');
+    noUiSlider.create(slider, {
+        start: [20, 80],
+        connect: true,
+        step: 1,
+        orientation: 'horizontal', // 'horizontal' or 'vertical'
+        range: {
+            'min': 0,
+            'max': 100
+        }
+    });
+</script>
