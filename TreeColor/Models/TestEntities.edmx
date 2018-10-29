@@ -4,14 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SettingsTestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SettingsTestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Points">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="testid" Type="int" />
-          <Property Name="color" Type="int" />
+          <Property Name="color" Type="varchar" MaxLength="10" />
           <Property Name="Symbol" Type="varchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="Results">
@@ -32,7 +32,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="test_name" Type="varchar" MaxLength="100" />
-          <Property Name="field_color" Type="int" />
+          <Property Name="field_color" Type="varchar" MaxLength="10" />
           <Property Name="Point_Size" Type="int" />
           <Property Name="Speed" Type="int" />
           <Property Name="int_min" Type="int" />
@@ -48,7 +48,7 @@
           <Property Name="Gender" Type="varchar" MaxLength="1" />
           <Property Name="NewId" Type="varchar" MaxLength="256" />
         </EntityType>
-        <Association Name="FK__Points__testid__173876EA">
+        <Association Name="FK__Points__testid__1FCDBCEB">
           <End Role="Tests" Type="Self.Tests" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
@@ -62,7 +62,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Results__pointid__20C1E124">
+        <Association Name="FK__Results__pointid__22AA2996">
           <End Role="Points" Type="Self.Points" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
@@ -76,7 +76,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Results__userid__1FCDBCEB">
+        <Association Name="FK__Results__userid__239E4DCF">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
@@ -95,15 +95,15 @@
           <EntitySet Name="Results" EntityType="Self.Results" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tests" EntityType="Self.Tests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Points__testid__173876EA" Association="Self.FK__Points__testid__173876EA">
+          <AssociationSet Name="FK__Points__testid__1FCDBCEB" Association="Self.FK__Points__testid__1FCDBCEB">
             <End Role="Tests" EntitySet="Tests" />
             <End Role="Points" EntitySet="Points" />
           </AssociationSet>
-          <AssociationSet Name="FK__Results__pointid__20C1E124" Association="Self.FK__Results__pointid__20C1E124">
+          <AssociationSet Name="FK__Results__pointid__22AA2996" Association="Self.FK__Results__pointid__22AA2996">
             <End Role="Points" EntitySet="Points" />
             <End Role="Results" EntitySet="Results" />
           </AssociationSet>
-          <AssociationSet Name="FK__Results__userid__1FCDBCEB" Association="Self.FK__Results__userid__1FCDBCEB">
+          <AssociationSet Name="FK__Results__userid__239E4DCF" Association="Self.FK__Results__userid__239E4DCF">
             <End Role="Users" EntitySet="Users" />
             <End Role="Results" EntitySet="Results" />
           </AssociationSet>
@@ -118,7 +118,7 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="testid" Type="Int32" />
-          <Property Name="color" Type="Int32" />
+          <Property Name="color" Type="String" />
           <Property Name="Symbol" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Tests" Relationship="Self.FK__Points__testid__173876EA" FromRole="Points" ToRole="Tests" />
           <NavigationProperty Name="Results" Relationship="Self.FK__Results__pointid__20C1E124" FromRole="Points" ToRole="Results" />
@@ -143,7 +143,7 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="test_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="field_color" Type="Int32" />
+          <Property Name="field_color" Type="String" />
           <Property Name="Point_Size" Type="Int32" />
           <Property Name="Speed" Type="Int32" />
           <Property Name="int_min" Type="Int32" />
@@ -159,7 +159,7 @@
           <Property Name="Activity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Gender" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Results" Relationship="Self.FK__Results__userid__1FCDBCEB" FromRole="Users" ToRole="Results" />
-          <Property Name="NewId" Type="String" />
+          <Property Name="NewId" Type="String" MaxLength="256" Unicode="false" FixedLength="false" />
         </EntityType>
         <Association Name="FK__Points__testid__173876EA">
           <End Role="Tests" Type="Self.Tests" Multiplicity="0..1">

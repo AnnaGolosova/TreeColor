@@ -14,19 +14,21 @@ namespace TreeColor.Controllers
         {
             try
             {
+                ViewBag.TestingNumber = DBcontext.Results.Max(r => r.testingnumber) + 1 ?? 1;
                 ViewBag.Tests = DBcontext.Tests.AsNoTracking().ToList();
 
                 if(showResults)
                 {
-                    ViewBag.Result = DBcontext.Results
-                        .Where(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber))
-                        .Average(r => r.tim);
+                    if(ViewBag.Result = DBcontext.Results
+                        .Any(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber)))
+                        ViewBag.Result = DBcontext.Results
+                            .Where(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber))
+                            .Average(r => r.tim);
                     ViewBag.Average = DBcontext.Results.Where(r => r.Points.testid == DBcontext.Results.Where(res => res.testingnumber == DBcontext.Results.Max(rr => rr.testingnumber)).FirstOrDefault().Points.testid).Average(r => r.tim);
                     ViewBag.ErrorAmount = DBcontext.Results.Where(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber)).Count(r => r.error > 0);
                 }
                 else
                 {
-                    ViewBag.TestingNumber = DBcontext.Results.Max(r => r.testingnumber) + 1;
                     ViewBag.CurrentTest = (Tests)Session["CurrentTest"];
                 }
             }

@@ -6,22 +6,6 @@
         <script src="~/Scripts/jquery-3.2.1.js"></script>
     </head>
     <body>
-        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-        {
-            @Html.AntiForgeryToken()
-            <ul id="dropdown1" class="dropdown-content">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li><a href="#!"><i class="material-icons left">settings</i>@User.Identity.Name</a></li>
-                }
-                else
-                {
-                    <li><a href="#!"><i class="material-icons left">settings</i>Settings</a></li>
-                }
-                <li class="divider"></li>
-                <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="material-icons left">exit_to_app</i>Exit</a></li>
-            </ul>
-        }
         <ul id="dropdown2" class="dropdown-content">
             @using (Html.BeginForm("ChangeTest", "Home"))
             {
@@ -36,14 +20,15 @@
         </ul>
         <nav>
             <div class="nav-wrapper">
-                <a href="#!" class="brand-logo">Start test</a>
+                <a href="#!" class="brand-logo">ThreeColor</a>
                 <ul class="right hide-on-med-and-down">
                    
                     <li><a href="sass.html">@ViewBag.TestName</a></li>
-                    <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Account <i class="material-icons right">arrow_drop_down</i></a></li>
-                    <li><a class="dropdown-button" href="#!" data-activates="dropdown2">Choose the Test <i class="material-icons right">arrow_drop_down</i></a></li>
+                    <li><a class="dropdown-button" href="/Account/LogOff">Сменить пользователя</a></li>
+                    <li><a class="dropdown-button" href="/Settings/TestList">Настройки</a></li>
+                    <li><a class="dropdown-button" href="#!" data-activates="dropdown2">Выберите тест <i class="material-icons right">arrow_drop_down</i></a></li>
                 </ul>
-</div>
+            </div>
 
         </nav>
             @RenderBody()

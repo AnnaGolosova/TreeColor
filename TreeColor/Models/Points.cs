@@ -22,7 +22,7 @@ namespace TreeColor.Models
     
         public int id { get; set; }
         public Nullable<int> testid { get; set; }
-        public Nullable<int> color { get; set; }
+        public string color { get; set; }
         public string Symbol { get; set; }
     
         public virtual Tests Tests { get; set; }

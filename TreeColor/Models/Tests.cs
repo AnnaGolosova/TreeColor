@@ -22,7 +22,7 @@ namespace TreeColor.Models
     
         public int id { get; set; }
         public string test_name { get; set; }
-        public Nullable<int> field_color { get; set; }
+        public string field_color { get; set; }
         public Nullable<int> Point_Size { get; set; }
         public Nullable<int> Speed { get; set; }
         public Nullable<int> int_min { get; set; }
