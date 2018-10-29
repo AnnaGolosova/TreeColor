@@ -9,20 +9,15 @@
         <div class="results" style="text-align : center;">
             <h5>
                 Спасибо за прохождение теста! <br />
-                Среднее время реации - @ViewBag.Result<br />
-                Количество ошибок - @ViewBag.ErrorAmount
-                Среднее время реакции для данного теста - @ViewBag.Average
+                Среднее время реации - @((ViewBag.Result/1000).ToString("N3")) mc<br />
+                Количество ошибок - @ViewBag.ErrorAmount <br />
+                Среднее время реакции для данного теста - @((ViewBag.Average/1000).ToString("N3")) mc
             </h5>
         </div>
     }
 
     @if (ViewBag.CurrentTest != null)
     {
-        string backColor = Convert.ToString(ViewBag.CurrentTest.field_color, 16);
-        string R = backColor.Substring(backColor.Length - 2, 2);
-        string G = backColor.Substring(backColor.Length - 4, 2);
-        string B = backColor.Substring(0, 2);
-        backColor = R + G + B;
         <div class="row">
             <div class="col s2">
                 <button class="waves-effect waves-light btn" id="StartTesting">Начать тестирование</button>
@@ -33,205 +28,200 @@
         <div class="results" style="text-align : center;">
             <h5> Чтобы начать тестирование, нажмите "Начать" </h5>
         </div>
-            <div class="row testing" style="height : 75%;">
-                @if (ViewBag.CurrentTest != null)
-                {
-                    <div class="col s1" style="min-height: 100%; background-color : #@backColor">
-                        @foreach (Points point in ViewBag.CurrentTest.Points)
-                        {
-                            string pointColor = ((int)point.color).ToString("X6");
-                            string r = pointColor.Substring(pointColor.Length - 2, 2);
-                            string g = pointColor.Substring(pointColor.Length - 4, 2);
-                            string b = pointColor.Substring(0, 2);
-                            <h5 style="color : #@(r + g + b)">@point.Symbol</h5>
-                            <div hidden class="colors">@(r + g + b)</div>
-                            <div hidden class="keys">@point.Symbol</div>
-                        }
-                    </div>
-                    <div class="col s11 divv" style="min-height: 100%;">
-                        <canvas id="canvas" width="1200" height="475"></canvas>
-                    </div>
-                    <script type="text/javascript">
-                        //------------
-                        //Finding DPI
-                        var dpi = {
-                            v: 0,
-                            get: function (noCache) {
-                                if (noCache || dpi.v == 0) {
-                                    e = document.body.appendChild(document.createElement("DIV"));
-                                    e.style.width = "1in";
-                                    e.style.padding = '0';
-                                    dpi.v = e.offsetWidth;
-                                    e.parentNode.removeChild(e);
-                                }
-                                return dpi.v;
+        <div class="row testing" style="height : 75%;">
+            @if (ViewBag.CurrentTest != null)
+            {
+                <div class="col s1" style="min-height: 100%; background-color : #@ViewBag.CurrentTest.field_color">
+                    @foreach (Points point in ViewBag.CurrentTest.Points)
+                    {
+                        <h5 style="color : #@point.color">@point.Symbol</h5>
+                        <div hidden class="colors">@point.color</div>
+                        <div hidden class="keys">@point.Symbol</div>
+                    }
+                </div>
+                <div class="col s11 divv" style="height: 100%;">
+                    <canvas id="canvas" style="display:block; width:inherit; height:inherit;"></canvas>
+                </div>
+                <script type="text/javascript">
+                    //------------
+                    //Finding DPI
+                    var dpi = {
+                        v: 0,
+                        get: function (noCache) {
+                            if (noCache || dpi.v == 0) {
+                                e = document.body.appendChild(document.createElement("DIV"));
+                                e.style.width = "1in";
+                                e.style.padding = '0';
+                                dpi.v = e.offsetWidth;
+                                e.parentNode.removeChild(e);
                             }
+                            return dpi.v;
                         }
-                        //-----------
-                        var fps = 50;
-                        var time = 0;
-                        var mmPerInch = 25.4;
-                        var pxPerInch = dpi.get(false);
+                    }
+                    //-----------
+                    var fps = 50;
+                    var time = 0;
+                    var mmPerInch = 25.4;
+                    var pxPerInch = dpi.get(false);
 
-                        var pointId;
-                        var timeForWait;
-                        var currY;
-                        var currX;
-                        var timer;
-                        var testingNumber = @ViewBag.TestingNumber;
+                    var pointId;
+                    var timeForWait;
+                    var currY;
+                    var currX;
+                    var timer;
+                    var testingNumber = @ViewBag.TestingNumber;
 
-                        function GenerateValues()
-                        {
-                            currX = Math.random() * (canvas.width - 50) + 25;
-                            currY = Math.random() * (canvas.height - 50) + 25;
-                            timeForWait = Math.random() * (@ViewBag.CurrentTest.int_max - @ViewBag.CurrentTest.int_min) + @ViewBag.CurrentTest.int_min;
-                            pointId = Math.floor(Math.random() * @ViewBag.CurrentTest.Points.Count);
-                        }
+                    function GenerateValues()
+                    {
+                        currX = Math.random() * (canvas.width - 50) + 25;
+                        currY = Math.random() * (canvas.height - 50) + 25;
+                        timeForWait = Math.random() * (@ViewBag.CurrentTest.int_max - @ViewBag.CurrentTest.int_min) + @ViewBag.CurrentTest.int_min;
+                        pointId = Math.floor(Math.random() * @ViewBag.CurrentTest.Points.Count);
+                    }
 
-                        var allIsGood = false;
-                        var radius = (@ViewBag.CurrentTest.Point_Size) / 10000 / mmPerInch * pxPerInch;
-                        var count = 0;
-                        var canvas = document.getElementById('canvas');
-                        var context = canvas.getContext('2d');
+                    var allIsGood = false;
+                    var radius = (@ViewBag.CurrentTest.Point_Size) / 10000 / mmPerInch * pxPerInch;
+                    var count = 0;
+                    var canvas = document.getElementById('canvas');
+                    var context = canvas.getContext('2d');
 
 
-                        // прирашение радиуса (px/s)
-                        var dr = (@ViewBag.CurrentTest.Speed) /10000 / mmPerInch * pxPerInch;
-                        var colors;
-                        var elements = document.getElementsByClassName("colors");
-                        ClearCanvas();
+                    // прирашение радиуса (px/s)
+                    var dr = (@ViewBag.CurrentTest.Speed) /10000 / mmPerInch * pxPerInch;
+                    var colors;
+                    var elements = document.getElementsByClassName("colors");
+                    ClearCanvas();
+                    GenerateValues();
+                    var keys;
+                    var colors = ConvertColors(elements);
+                    $(".testing").hide();
+                    document.getElementById("StartTesting").onclick = StartTesting;
+
+
+                    function ClearCanvas(){
+                        context.rect(0, 0, canvas.width, canvas.height);
+                        context.fillStyle = '#@ViewBag.CurrentTest.field_color';
+                        context.fill();
+                    }
+
+                    function Drawing() {
                         GenerateValues();
-                        var keys;
-                        var colors = ConvertColors(elements);
-                        $(".testing").hide();
-                        document.getElementById("StartTesting").onclick = StartTesting;
-
-
-                        function ClearCanvas(){
-                            context.rect(0, 0, canvas.width, canvas.height);
-                            context.fillStyle = '#@backColor';
-                            context.fill();
-                        }
-
-                        function Drawing() {
-                            GenerateValues();
-                            timer = setInterval(function () {
-                                if(allIsGood && count <= 30) {
-                                    if(timeForWait > 0)
-                                    {
-                                        timeForWait -= 1000 / fps;
-                                    }
-                                    else
-                                    {
-                                        context.beginPath();
-                                        context.arc(currX, currY, radius, 0, 2 * Math.PI, false);
-                                        context.fillStyle = '#' + elements[pointId].textContent;
-                                        context.strokeStyle = '#@backColor';
-                                        context.fill();
-                                        context.stroke();
-                                        time += 1000 / fps;
-                                        radius += dr / fps;
-                                    }
+                        timer = setInterval(function () {
+                            if(allIsGood && count <= 30) {
+                                if(timeForWait > 0)
+                                {
+                                    timeForWait -= 1000 / fps;
                                 }
-                                else {
-                                    StopTesting();
+                                else
+                                {
+                                    context.beginPath();
+                                    context.arc(currX, currY, radius, 0, 2 * Math.PI, false);
+                                    context.fillStyle = '#' + elements[pointId].textContent;
+                                    context.strokeStyle = '#@ViewBag.CurrentTest.field_color';
+                                    context.fill();
+                                    context.stroke();
+                                    time += 1000 / fps;
+                                    radius += dr / fps;
                                 }
-                            }, 1000 / fps)
-                        }
-
-                        function press(event) {
-                            if(allIsGood) {
-                                var errCod = null;
-                                if(timeForWait > 0) errCod = 1;
-                                if(event.key.toLowerCase().localeCompare(keys[pointId].toLowerCase()) != 0) errCod = 2;
-                                alert(event.key.toLowerCase() + " "  + keys[pointId].toLowerCase());
-                                var Result = {
-                                    'testingnumber': testingNumber,
-                                    'pointid' : pointId,
-                                    'tim': time,
-                                    'error' : errCod,
-                                    'userid' : @ViewBag.CurrentTest.id,
-                                };
-                                $.ajax({
-                                    type: "POST",
-                                    url: "/Home/PutResult",
-                                    data: JSON.stringify(Result),
-                                    contentType: "application/json; charset=utf-8",
-                                    dataType: "json",
-                                    success: successFunc,
-                                    error: errorFunc
-                                });
-                            }
-                        }
-
-                        function successFunc(data, status) {
-                            if(data == true) {
-                                $(".counter").text(count++ + "/30");
-                                ClearCanvas();
-                                time = 0;
-                                radius = (@ViewBag.CurrentTest.Point_Size) / 10000 / mmPerInch * pxPerInch;
-                                GenerateValues();
                             }
                             else {
                                 StopTesting();
                             }
-                        }
+                        }, 1000 / fps)
+                    }
 
-                        function errorFunc(errorData) {
+                    function press(event) {
+                        if(allIsGood) {
+                            var errCod = null;
+                            if(timeForWait > 0) errCod = 1;
+                            if(event.key.toLowerCase().localeCompare(keys[pointId].toLowerCase()) != 0) errCod = 2;
+                            var Result = {
+                                'testingnumber': testingNumber,
+                                'pointid' : pointId,
+                                'tim': time,
+                                'error' : errCod,
+                                'userid' : @ViewBag.CurrentTest.id,
+                            };
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/PutResult",
+                                data: JSON.stringify(Result),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                error: errorFunc
+                            });
+                            successFunc(true);
+                        }
+                    }
+
+                    function successFunc(data) {
+                        if(data == true) {
+                            $(".counter").text(count++ + "/30");
+                            ClearCanvas();
+                            time = 0;
+                            radius = (@ViewBag.CurrentTest.Point_Size) / 10000 / mmPerInch * pxPerInch;
+                            GenerateValues();
+                        }
+                        else {
                             StopTesting();
                         }
+                    }
 
-                        function StartTesting() {
-                            allIsGood = true;
-                            $("#StartTesting").text("Остановить тестирование");
-                            document.getElementById('StartTesting').onclick = StopTesting;
-                            Drawing();
-                            document.onkeypress = function(e) {
-                                press(e);
-                            };
+                    function errorFunc(errorData) {
+                        StopTesting();
+                    }
 
-                            $(".results").hide();
-                            $(".testing").show();
+                    function StartTesting() {
+                        allIsGood = true;
+                        $("#StartTesting").text("Остановить тестирование");
+                        document.getElementById('StartTesting').onclick = StopTesting;
+                        Drawing();
+                        document.onkeypress = function(e) {
+                            press(e);
+                        };
+
+                        $(".results").hide();
+                        $(".testing").show();
+                    }
+
+                    function StopTesting() {
+                        clearInterval(timer);
+                        allIsGood = false;
+                        ClearCanvas();
+                        $(".counter").text("0/30");
+                        $("#StartTesting").text("Начать тестирование");
+                        document.getElementById('StartTesting').onclick = StartTesting;
+                        document.onkeypress = null;
+
+                        $(".results").hide();
+                        $(".testing").hide();
+
+                        window.location.href = "/Home/Index?showResults=true";
+                    }
+
+                    function ConvertColors(elem){
+                        var colors = [];
+                        keys = [];
+                        var keyElements = document.getElementsByClassName("keys");
+                        var j;
+                        for(j = 0; j < elem.length; j++){
+                            colors.push(elem[j].textContent);
+                            keys.push(keyElements[j].textContent);
                         }
-
-                        function StopTesting() {
-                            clearInterval(timer);
-                            allIsGood = false;
-                            ClearCanvas();
-                            $(".counter").text("0/30");
-                            $("#StartTesting").text("Начать тестирование");
-                            document.getElementById('StartTesting').onclick = StartTesting;
-                            document.onkeypress = null;
-
-                            $(".results").hide();
-                            $(".testing").hide();
-
-                            window.location.href = "/Home/Index?showResults=true";
-                        }
-
-                        function ConvertColors(elem){
-                            var colors = [];
-                            keys = [];
-                            var keyElements = document.getElementsByClassName("keys");
-                            var j;
-                            for(j = 0; j < elem.length; j++){
-                                colors.push(elem[j].textContent);
-                                keys.push(keyElements[j].textContent);
-                            }
-                            return colors;
-                        }
-                    </script>
-                }
-                else
-                {
-                    <p>Select the test!</p>
-                }
-            </div>
+                        return colors;
+                    }
+                </script>
             }
-            else if(ViewBag.ErrorMessage != null)
+            else
             {
-            <div>
-                <p>@ViewBag.ErrorMessage</p>
-            </div>
+                <p>Select the test!</p>
             }
+        </div>
+        }
+        else if(ViewBag.ErrorMessage != null)
+        {
+        <div>
+            <p>@ViewBag.ErrorMessage</p>
+        </div>
+        }
 

@@ -10,7 +10,7 @@ using TreeColor.Models;
 
 namespace TreeColor.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ManageController : BaseController
     {
         private ApplicationSignInManager _signInManager;

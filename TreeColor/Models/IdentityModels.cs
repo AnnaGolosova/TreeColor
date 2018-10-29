@@ -21,7 +21,8 @@ namespace TreeColor.Models
     public class UserDbContext : IdentityDbContext<ApplicationUser>
     {
         public UserDbContext()
-            : base("NewString", throwIfV1Schema: false)
+        //    : base("SomeeDotComUsers", throwIfV1Schema: false)
+            : base("SomeeDotCom", throwIfV1Schema: false)
         {
         }
 

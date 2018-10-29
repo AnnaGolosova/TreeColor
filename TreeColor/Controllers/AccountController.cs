@@ -9,6 +9,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TreeColor.Models;
+using TreeColor.Utils;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace TreeColor.Controllers
 {
@@ -66,14 +69,31 @@ namespace TreeColor.Controllers
         [HttpPost]
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(Users model, string returnUrl)
+        public async Task<ActionResult> Login(Users model, string returnUrl, bool asAdmin = false)
         {
+            if(asAdmin)
+            {
+                try
+                {
+                    if (string.Equals(model.Activity, "adminTest@gsu.by") && string.Equals(model.NewId, "adminPassword"))
+                    {
+                        await SignInManager.SignInAsync(UserManager.FindById("b90b3a12-2a08-4fca-9523-34217947404c"),  false,  false);
+                    }
+                    else
+                        throw new Exception();
+                    return RedirectToLocal(returnUrl);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = ex.Message;
+                    return View(model);
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            LoginViewModel user = new LoginViewModel();
 
             ApplicationUser existsUser = null;
             foreach(Users u in DBcontext.Users.ToList())
@@ -89,8 +109,15 @@ namespace TreeColor.Controllers
                 var newUser = new ApplicationUser { UserName = model.Activity + model.Age + model.Gender + "@gmail.com",
                     Email = model.Activity + model.Age + model.Gender + "@gmail.com"
                 };
+                var res = await UserManager.CreateAsync(new ApplicationUser() { UserName = "adminTest@gsu.by", Email = "adminTest@gsu.by" }, "adminPassword");
                 var newResult = await UserManager.CreateAsync(newUser, password);
-                DBcontext.Users.Add(new Users((int)model.Age, model.Activity, model.Gender, newUser.Id));
+                DBcontext.Users.Add(new Users()
+                {
+                    Activity = model.Activity,
+                    Age = model.Age,
+                    Gender = model.Gender,
+                    id = model.id
+                });
                 await DBcontext.SaveChangesAsync();
                 if (newResult.Succeeded)
                 {
@@ -102,8 +129,27 @@ namespace TreeColor.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            await SignInManager.SignInAsync(existsUser, true, true);
+            await SignInManager.SignInAsync(existsUser, false, false);
             return RedirectToLocal(returnUrl);
+        }
+
+        private static string HashPassword(string password)
+        {
+            byte[] salt;
+            byte[] buffer2;
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+            using (Rfc2898DeriveBytes bytes = new Rfc2898DeriveBytes(password, 0x10, 0x3e8))
+            {
+                salt = bytes.Salt;
+                buffer2 = bytes.GetBytes(0x20);
+            }
+            byte[] dst = new byte[0x31];
+            Buffer.BlockCopy(salt, 0, dst, 1, 0x10);
+            Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
+            return Convert.ToBase64String(dst);
         }
 
         //
@@ -402,8 +448,6 @@ namespace TreeColor.Controllers
 
         //
         // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);

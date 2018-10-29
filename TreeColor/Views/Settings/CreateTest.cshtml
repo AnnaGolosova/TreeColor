@@ -1,0 +1,249 @@
+﻿@model TreeColor.Models.Tests
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="row" style="margin-top:75px;">
+    <div class="col s8 z-depth-5 offset-s2">
+        @if (Model != null)
+        {
+            using (Html.BeginForm("SettingsTest", "Settings"))
+            {
+                string fieldColor =
+                    ((int)Model.field_color).ToString("X6").Substring(4, 2) +
+                    ((int)Model.field_color).ToString("X6").Substring(2, 2) +
+                    ((int)Model.field_color).ToString("X6").Substring(0, 2);
+
+                List<string> pointColors = new List<string>();
+                if (Model.Points.Count > 0)
+                {
+                    foreach (TreeColor.Models.Points point in Model.Points)
+                    {
+                        pointColors.Add(
+                            ((int)point.color).ToString("X6").Substring(4, 2) +
+                            ((int)point.color).ToString("X6").Substring(2, 2) +
+                            ((int)point.color).ToString("X6").Substring(0, 2)
+                        );
+                    }
+                }
+                <div class="row">
+                    <h4>Настройки теста</h4>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input name="test_name" id="last_name" type="text" class="validate" value="@Model.test_name">
+                        <label for="last_name">Название теста</label>
+                    </div>
+                    <div class="input-field col s2">
+                        <label for="field_color">Цвет фона</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <input class="jscolor" value="@fieldColor" onchange="ChangeFieldColor(event)">
+                        <input type="hidden" name="field_color" id="field_color" value="@Model.field_color" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row">
+                        <div class="col s12 center-align">
+                            <h5>Интервал между появлением точек, мс</h5><br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s1">
+                            <h5>Min</h5>
+                        </div>
+                        <div class="col s10">
+                            <div id="test-slider" onchange="ChangeSlider(event)"></div>
+                        </div>
+                        <div class="col s1">
+                            <h5>Max</h5>
+                        </div>
+                        <input name="int_min" id="int_min" type="hidden" value="@Model.int_min" />
+                        <input name="int_max" id="int_max" type="hidden" value="@Model.int_max" />
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col s4">
+                        <h4>Настройки точек</h4>
+                    </div>
+                    <div class="input-field col s2 offset-s1">
+                        <input id="pointsCol" type="number" value="@Model.Points.Count" onchange="ChangePointsCount(event)" max="15" min="1">
+                        <label for="pointsCol">Количество точек</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s3">
+                        <div class="input-field">
+                            <input type="number" value="@(((double)Model.Point_Size/10000).ToString("N3").Replace(",", "."))" step="0.1" onchange="ChangePointSize(event)">
+                            <label for="pointsCol">Начальный радиус, мм</label>
+                            <input id="Point_Size" name="Point_Size" type="hidden" value="@Model.Point_Size" />
+                        </div>
+                        <div class="input-field">
+                            <input type="text" value="@(((double)Model.Speed/10000).ToString("N3"))" onchange="ChangeSpeed(event)">
+                            <input id="Speed" name="Speed" type="hidden" value="@Model.Speed" />
+                            <label for="pointsCol">Скорость роста точки, мм/с</label>
+                        </div>
+                        <div class="input-field">
+                            <a class="waves-effect waves-light btn" onclick="PointAnimate()">Показать</a>
+                        </div>
+                    </div>
+                    @if (Model.Points.Count > 0)
+                    {
+                        <div class="col s8 offset-s1" id="pointsContainer">
+                            <div class="row">
+                                <div class="col s3">
+                                    <h5>Клавиша</h5>
+                                </div>
+                                <div class="col s3 offset-s1">
+                                    <h5>Цвет</h5>
+                                </div>
+                                <div class="col s4 offset-s1 ">
+                                    <h5>Предпросмотр</h5>
+                                </div>
+                            </div>
+                            <hr />
+                            @{int i = 0;}
+                            @foreach (TreeColor.Models.Points point in Model.Points)
+                            {
+                                <div class="row keySettings" onchange="DrawPoint(event)">
+                                    <input class="testId" name="Points[@i].testid" type="hidden" value="@point.testid" />
+                                    <div class="col s3">
+                                        <div class="input-field">
+                                            <input name="Points[@i].Symbol" type="text" class="validate keyField" data-length="1" onkeyup="KeyType(event)" onkeypress="KeyType(event)" value="@point.Symbol">
+                                        </div>
+                                    </div>
+                                    <div class="col s3 offset-s1 insertHere">
+                                        <input class="jscolor" value="@pointColors[i]" onchange="ChangePointColor(event)" pointID="@i">
+                                        <input class="pointColorHidden" name="Points[@i].color" type="hidden" id="point_@i" value="@point.color" />
+                                    </div>
+                                    <div class="col s4 offset-s1 ">
+                                        <canvas width="118" height="48"></canvas>
+                                    </div>
+                                    <hr />
+                                </div>
+                                i++;
+                            }
+                        </div>
+                                }
+                                else
+                                {
+                                    <div class="col s8 offset-s1 noOnePoint">
+                                        <div class="row">
+                                            <p>Добавьте хотя бы одну точку</p>
+                                        </div>
+                                    </div>
+                                }
+
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <button class="waves-effect waves-light btn" type="submit" value="Сохранить изменения">Сохранить изменения</button>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    function DrawPoint(event)
+                    {
+
+                    }
+
+                    function ChangePointSize(event) {
+                        document.getElementById("Point_Size").value = parseFloat( event.currentTarget.value) * 10000;
+                    }
+
+                    function ChangeSpeed(event) {
+                        document.getElementById("Speed").value = parseFloat(event.currentTarget.value.replace(new RegExp(","), ".")) * 10000;
+                        alert(document.getElementById("Speed").value);
+                    }
+
+                    function ChangePointColor(event){
+                        document.getElementById("point_" + event.currentTarget.attributes[3].nodeValue).value = parseInt(event.currentTarget.value, 16);
+                    }
+
+                    function ChangeFieldColor(event){
+                        document.getElementById("field_color").value = parseInt(event.currentTarget.value, 16);
+                    }
+
+                    function KeyType(event)
+                    {
+                        event.currentTarget.value = event.key;
+                    }
+
+                    function edt1KeyDown(e) {
+                        var edt1 = document.getElementById('edt1');
+                        str += edt1.value;
+                        edt1.value = '';
+
+                        var edt2 = document.getElementById("edt2");
+                        if (e.keyCode == 8) { // backspace
+                            edt2.value = edt2.value.substring(0, edt2.value.length - 1);
+                        }
+                    }
+
+                    var slider = document.getElementById('test-slider');
+                    noUiSlider.create(slider, {
+                        start: [@Model.int_min, @Model.int_max],
+                        connect: true,
+                        step: 50,
+                        tooltips: true,
+                        orientation: 'horizontal',
+                        range: {
+                            'max': 5000,
+                            'min': 0
+                        }
+                    });
+
+                    slider.noUiSlider.on('change', function (values, handle, unencoded, tap, positions) {
+                        document.getElementById("int_min").value = parseInt(values[0], 10);
+                        document.getElementById("int_max").value = parseInt(values[1], 10);
+                    });
+
+                    function ChangePointsCount(event) {
+                        if(event.currentTarget.value > document.getElementsByClassName("keySettings").length){
+                            for(var i = event.currentTarget.value - document.getElementsByClassName("keySettings").length; i > 0; i--)
+                            {
+                                AddPoint();
+                            }
+                        }
+                        else {
+                            for(var i = -1 * (event.currentTarget.value - document.getElementsByClassName("keySettings").length); i > 0; i--)
+                            {
+                                DeletePoint();
+                            }
+                        }
+                    }
+
+                    function AddPoint() {
+                        var parent = document.getElementsByClassName("keySettings")[0];
+                        var copy = parent.cloneNode(true);
+                        var i = document.getElementsByClassName("keySettings").length;
+                        copy.querySelector(".keyField").value = "W";
+                        copy.querySelector(".keyField").name = "Points[" + i + "].Symbol";
+
+                        copy.querySelector(".jscolor").remove();
+                        copy.querySelector(".pointColorHidden").name = "Points[" + i + "].color";
+                        copy.querySelector(".pointColorHidden").id = "point_" + i;
+                        copy.querySelector(".pointColorHidden").value = "0";
+                        copy.querySelector(".testId").name = "Points[" + i + "].testid";
+                        copy.querySelector(".testId").value = @Model.id;
+
+                        var colorInput = document.createElement('INPUT');
+                        var picker = new jscolor(colorInput);
+                        picker.fromString("000000");
+                        copy.querySelector(".insertHere").insertBefore(colorInput, copy.querySelector(".pointColorHidden"));
+                        document.getElementById("pointsContainer").appendChild(copy);
+                    }
+
+                    function DeletePoint() {
+                        document.getElementsByClassName("keySettings")[document.getElementsByClassName("keySettings").length - 1].remove();
+                    }
+                </script>
+                                    }
+                                }
+                                else
+                                {
+                                    <h5>Тест не найден</h5>
+                                    <a class="btn waves-effect waves-light" href="/Settings/TestList">Назад к списку</a>
+                                }
+    </div>
+</div>
