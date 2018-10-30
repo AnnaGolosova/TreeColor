@@ -39,8 +39,8 @@
                         <div hidden class="keys">@point.Symbol</div>
                     }
                 </div>
-                <div class="col s11 divv" style="height: 100%;">
-                    <canvas id="canvas" style="display:block; width:inherit; height:inherit;"></canvas>
+                <div class="col s11" id="CanvasParent" style="height: 100%;">
+                    <canvas id="canvas"></canvas>
                 </div>
                 <script type="text/javascript">
                     //------------
@@ -82,7 +82,10 @@
                     var allIsGood = false;
                     var radius = (@ViewBag.CurrentTest.Point_Size) / 10000 / mmPerInch * pxPerInch;
                     var count = 0;
+                    var canvasDiv = document.getElementById('CanvasParent');
                     var canvas = document.getElementById('canvas');
+                    canvas.width = canvasDiv.clientWidth;
+                    canvas.height = canvasDiv.clientHeight;
                     var context = canvas.getContext('2d');
 
 

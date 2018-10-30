@@ -5,19 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using ThreeColor.Server.Models;
+using TreeColor.Server.Models;
 
-namespace ThreeColor.Server.Data
+namespace TreeColor.Server.Data
 {
     public class AuthRepository : IDisposable
     {
-        private DataContext _ctx;
+        private AuthDataContext _ctx;
 
         private UserManager<IdentityUser> _userManager;
 
         public AuthRepository()
         {
-            _ctx = new DataContext();
+            _ctx = new AuthDataContext();
             _userManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(_ctx));
         }
 

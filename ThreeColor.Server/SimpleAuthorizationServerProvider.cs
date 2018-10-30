@@ -2,9 +2,9 @@
 using Microsoft.Owin.Security.OAuth;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ThreeColor.Server.Data;
+using TreeColor.Server.Data;
 
-namespace ThreeColor.Server
+namespace TreeColor.Server
 {
     public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
     {

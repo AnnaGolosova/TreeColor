@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using TreeColor.Models;
+using TreeColor.Utils;
 
 namespace TreeColor.Controllers
  {
@@ -48,7 +49,9 @@ namespace TreeColor.Controllers
             }
             Tests oldTest = DBcontext.Tests.Where(t => t.id == model.id).FirstOrDefault();
             model.id = oldTest.id;
-            oldTest = model;
+            oldTest.Points.Clear();
+            DBcontext.SaveChanges();
+            oldTest.UpdateTest(model);
 
             DBcontext.SaveChanges();
             return RedirectToAction("TestList", new { message = "Изменения успешно сохранены!" });

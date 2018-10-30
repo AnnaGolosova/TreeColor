@@ -46,7 +46,7 @@ namespace TreeColor.Controllers
                 Session["CurrentTest"] = null;
             else
             {
-                Tests test = DBcontext.Tests.AsNoTracking().Where(t => t.id == id).FirstOrDefault();
+                Tests test = DBcontext.Tests.Where(t => t.id == id).FirstOrDefault();
                 Session["CurrentTest"] = test;
             }
             return RedirectToAction("Index");

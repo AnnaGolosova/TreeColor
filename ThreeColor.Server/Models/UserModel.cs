@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ThreeColor.Server.Models
+namespace TreeColor.Server.Models
 {
     public class UserModel
     {

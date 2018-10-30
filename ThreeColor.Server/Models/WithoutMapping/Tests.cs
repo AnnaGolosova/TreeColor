@@ -11,7 +11,9 @@ namespace TreeColor.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Tests
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -29,7 +31,8 @@ namespace TreeColor.Models
                 Symbol = "A"
             });
         }
-    
+
+        [Key]
         public int id { get; set; }
         public string test_name { get; set; }
         public string field_color { get; set; }
@@ -37,8 +40,7 @@ namespace TreeColor.Models
         public Nullable<int> Speed { get; set; }
         public Nullable<int> int_min { get; set; }
         public Nullable<int> int_max { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
         public virtual ICollection<Points> Points { get; set; }
     }
 }

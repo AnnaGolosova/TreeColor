@@ -3,12 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using TreeColor.Server.Abstract;
+using TreeColor.Server.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace ThreeColor.Server.Controllers
+namespace TreeColor.Server.Controllers
 {
     [RoutePrefix("api/Orders")]
     public class OrdersController : ApiController
     {
+        TestContext _context;
+
+        public OrdersController(TestContext context)
+        {
+            _context = context;
+        }
+
         [Authorize]
         [Route("")]
         public IHttpActionResult Get()
@@ -19,7 +29,7 @@ namespace ThreeColor.Server.Controllers
         [Route("get2")]
         public IHttpActionResult Get2()
         {
-            return Ok(Order.CreateOrders());
+            return Ok(_context.Tests.Include(t => t.Points).ToList());
         }
 
     }

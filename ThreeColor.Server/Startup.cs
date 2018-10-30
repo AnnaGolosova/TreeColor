@@ -3,15 +3,18 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
 using System.Web.Http;
+using TreeColor.Server.Unity;
 
-[assembly: OwinStartup(typeof(ThreeColor.Server.Startup))]
-namespace ThreeColor.Server
+[assembly: OwinStartup(typeof(TreeColor.Server.Startup))]
+namespace TreeColor.Server
 {
     public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
             HttpConfiguration config = new HttpConfiguration();
+            config.DependencyResolver = new UnityResolver(
+                UnityHelpers.GetConfiguredContainer());
 
             ConfigureOAuth(app);
 

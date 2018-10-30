@@ -12,33 +12,21 @@ namespace TreeColor.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Tests
+    public partial class Users
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Tests()
+        public Users()
         {
-            Point_Size = 0;
-            Speed = 0;
-            int_max = 0;
-            int_min = 0;
-            field_color = "FFFFFF";
-            this.Points = new HashSet<Points>();
-            Points.Add(new Models.Points()
-            {
-                color = "000000",
-                Symbol = "A"
-            });
+            this.Results = new HashSet<Results>();
         }
     
         public int id { get; set; }
-        public string test_name { get; set; }
-        public string field_color { get; set; }
-        public Nullable<int> Point_Size { get; set; }
-        public Nullable<int> Speed { get; set; }
-        public Nullable<int> int_min { get; set; }
-        public Nullable<int> int_max { get; set; }
+        public Nullable<int> Age { get; set; }
+        public string Activity { get; set; }
+        public string Gender { get; set; }
+        public string NewId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Points> Points { get; set; }
+        public virtual ICollection<Results> Results { get; set; }
     }
 }

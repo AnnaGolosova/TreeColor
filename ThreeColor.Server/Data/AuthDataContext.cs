@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ThreeColor.Server.Data
+namespace TreeColor.Server.Data
 {
-    public class DataContext : IdentityDbContext<IdentityUser>
+    public class AuthDataContext : IdentityDbContext<IdentityUser>
     {
-        public DataContext()
+        public AuthDataContext()
             : base("DataContext")
         {
 

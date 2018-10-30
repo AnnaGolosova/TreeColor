@@ -7,9 +7,9 @@
     <div class="col s8 z-depth-5 offset-s2">
         @if (Model != null)
         {
-            using(Html.BeginForm("SettingsTest", "Settings"))
+            using(Html.BeginForm("SettingsTest", "Settings", new { NewTest = ViewBag.NewTest }, FormMethod.Post, null))
             {
-                
+
     <div class="row">
         <h4>Настройки теста</h4>
     </div>
@@ -22,7 +22,7 @@
             <label for="field_color">Цвет фона</label>
         </div>
         <div class="input-field col s4">
-            <input class="jscolor" value="@ViewBag.fieldColor" onchange="ChangeFieldColor(event)">
+            <input class="jscolor" value="@Model.field_color" onchange="ChangeFieldColor(event)">
             <input type="hidden" name="field_color" id="field_color" value="@Model.field_color"/>
         </div>
     </div>
@@ -101,7 +101,7 @@
                     </div>
                 </div>
                 <div class="col s3 offset-s1 insertHere">
-                    <input class="jscolor" value="@ViewBag.pointColors[i]" onchange="ChangePointColor(event)" pointID="@i">
+                    <input class="jscolor" value="@Model.Points.ToList()[i].color" onchange="ChangePointColor(event)"  pointID="@i">
                     <input class="pointColorHidden" name="Points[@i].color" type="hidden" id="point_@i" value="@point.color" />
                 </div>
                 <div class="col s4 offset-s1 ">
@@ -135,21 +135,20 @@
 
         }
 
+        function ChangePointColor(event){
+            document.getElementById("point_" + event.currentTarget.getAttribute("pointId")).value = event.currentTarget.value;
+        }
+
+        function ChangeFieldColor(event){
+            document.getElementById("field_color").value = event.currentTarget.value;
+        }
+
         function ChangePointSize(event) {
             document.getElementById("Point_Size").value = parseFloat( event.currentTarget.value) * 10000;
         }
 
         function ChangeSpeed(event) {
             document.getElementById("Speed").value = parseFloat(event.currentTarget.value.replace(new RegExp(","), ".")) * 10000;
-            alert(document.getElementById("Speed").value);
-        }
-
-        function ChangePointColor(event){
-            document.getElementById("point_" + event.currentTarget.attributes[3].nodeValue).value = parseInt(event.currentTarget.value, 16);
-        }
-
-        function ChangeFieldColor(event){
-            document.getElementById("field_color").value = parseInt(event.currentTarget.value, 16);
         }
 
         function KeyType(event)
@@ -218,6 +217,8 @@
             var colorInput = document.createElement('INPUT');
             var picker = new jscolor(colorInput);
             picker.fromString("000000");
+            colorInput.setAttribute("onchange", "ChangePointColor(event)");
+            colorInput.setAttribute("pointID", i);
             copy.querySelector(".insertHere").insertBefore(colorInput, copy.querySelector(".pointColorHidden"));
             document.getElementById("pointsContainer").appendChild(copy);
         }

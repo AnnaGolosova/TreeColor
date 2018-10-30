@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using ThreeColor.Server.Data;
-using ThreeColor.Server.Models;
+using TreeColor.Server.Data;
+using TreeColor.Server.Models;
 
-namespace ThreeColor.Server.Controllers
+namespace TreeColor.Server.Controllers
 {
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
