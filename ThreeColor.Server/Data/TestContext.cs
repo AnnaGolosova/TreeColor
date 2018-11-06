@@ -10,7 +10,7 @@ namespace TreeColor.Server.Data
     public class TestContext : DbContext
     {
         public TestContext()
-            : base("DataContext") { }
+            : base("SomeeDotCom") { }
 
         public virtual DbSet<Tests> Tests { get; set; }
     }

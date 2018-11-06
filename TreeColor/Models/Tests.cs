@@ -17,17 +17,12 @@ namespace TreeColor.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Tests()
         {
-            Point_Size = 0;
-            Speed = 0;
             int_max = 0;
             int_min = 0;
-            field_color = "FFFFFF";
+            Point_Size = 0;
+            Speed = 0;
             this.Points = new HashSet<Points>();
-            Points.Add(new Models.Points()
-            {
-                color = "000000",
-                Symbol = "A"
-            });
+            Points.Add(new Models.Points());
         }
     
         public int id { get; set; }

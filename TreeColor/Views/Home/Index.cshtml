@@ -73,14 +73,14 @@
 
                     function GenerateValues()
                     {
-                        currX = Math.random() * (canvas.width - 50) + 25;
-                        currY = Math.random() * (canvas.height - 50) + 25;
+                        currX = Math.random() * (canvas.width - 100) + 50;
+                        currY = Math.random() * (canvas.height - 100) + 50;
                         timeForWait = Math.random() * (@ViewBag.CurrentTest.int_max - @ViewBag.CurrentTest.int_min) + @ViewBag.CurrentTest.int_min;
                         pointId = Math.floor(Math.random() * @ViewBag.CurrentTest.Points.Count);
                     }
 
                     var allIsGood = false;
-                    var radius = (@ViewBag.CurrentTest.Point_Size) / 10000 / mmPerInch * pxPerInch;
+                    var radius = (@(ViewBag.CurrentTest.Point_Size != null ? ViewBag.CurrentTest.Point_Size : 0)) / 10000 / mmPerInch * pxPerInch;
                     var count = 0;
                     var canvasDiv = document.getElementById('CanvasParent');
                     var canvas = document.getElementById('canvas');

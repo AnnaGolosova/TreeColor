@@ -58,22 +58,36 @@
         </div>
     </div>
     <div class="row">
-
-
     <div class="col s3">
-    <div class="input-field">
-        <input type="number" value="@(((double)Model.Point_Size/10000).ToString("N3").Replace(",", "."))" step="0.1" onchange="ChangePointSize(event)">
-        <label for="pointsCol">Начальный радиус, мм</label>
-        <input id="Point_Size" name="Point_Size" type="hidden" value="@Model.Point_Size" />
-    </div>
-    <div class="input-field">
-        <input type="text" value="@(((double)Model.Speed/10000).ToString("N3"))" onchange="ChangeSpeed(event)">
-        <input id="Speed" name="Speed" type="hidden" value="@Model.Speed" />
-        <label for="pointsCol">Скорость роста точки, мм/с</label>
-    </div>   
+        <div class="input-field">
+            @if (Model.Point_Size.HasValue)
+            {
+                <input type="number" value="@(((double)Model.Point_Size/10000).ToString("N3").Replace(",", "."))" step="0.1" onchange="ChangePointSize(event)">
+            }
+            else
+            {
+                <input type="number" value="0" step="0.1" onchange="ChangePointSize(event)">
+            }
+            <label for="pointsCol">Начальный радиус, мм</label>
+            <input id="Point_Size" name="Point_Size" type="hidden" value="@Model.Point_Size" />
+        </div>
+        <div class="input-field">
+            @if (Model.Speed.HasValue)
+            {
+                <input type="text" value="@(Model.Speed.HasValue ? (((double)Model.Speed)/10000).ToString("N3") : "0")" onchange="ChangeSpeed(event)">
+            }
+            else
+            {
+                <input type="text" value="0" onchange="ChangeSpeed(event)">
+            }
+            <input id="Speed" name="Speed" type="hidden" value="@Model.Speed" />
+            <label for="pointsCol">Скорость роста точки, мм/с</label>
+        </div>   
+        <!--
         <div class="input-field">
             <a class="waves-effect waves-light btn" onclick="PointAnimate()">Показать</a>
         </div>
+        -->
     </div>
     @if (Model.Points.Count > 0)
     {

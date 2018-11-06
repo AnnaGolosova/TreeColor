@@ -34,7 +34,7 @@ namespace TreeColor.Server.Data.Repositories
 
         public IEnumerable<Tests> Get(Expression<Func<Tests, bool>> condition = null)
         {
-            throw new NotImplementedException();
+            return _dataContext.Tests.ToList();
         }
 
         public Task<Tests> GetAsync(params object[] id)
