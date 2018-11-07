@@ -39,8 +39,8 @@
                         <div hidden class="keys">@point.Symbol</div>
                     }
                 </div>
-                <div class="col s11 divv" style="height: 100%;">
-                    <canvas id="canvas" style="display:block; width:inherit; height:inherit;"></canvas>
+                <div class="col s11" id="divv" style="height: 100%;">
+                    <canvas id="canvas"></canvas>
                 </div>
                 <script type="text/javascript">
                     //------------
@@ -83,8 +83,10 @@
                     var radius = (@ViewBag.CurrentTest.Point_Size) / 10000 / mmPerInch * pxPerInch;
                     var count = 0;
                     var canvas = document.getElementById('canvas');
+                    var canvasParent = document.getElementById('divv');
+                    canvas.height = canvasParent.clientHeight;
+                    canvas.width = canvasParent.clientWidth;
                     var context = canvas.getContext('2d');
-
 
                     // прирашение радиуса (px/s)
                     var dr = (@ViewBag.CurrentTest.Speed) /10000 / mmPerInch * pxPerInch;
@@ -96,7 +98,6 @@
                     var colors = ConvertColors(elements);
                     $(".testing").hide();
                     document.getElementById("StartTesting").onclick = StartTesting;
-
 
                     function ClearCanvas(){
                         context.rect(0, 0, canvas.width, canvas.height);
