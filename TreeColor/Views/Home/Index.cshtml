@@ -88,7 +88,6 @@
                     canvas.height = canvasDiv.clientHeight;
                     var context = canvas.getContext('2d');
 
-
                     // прирашение радиуса (px/s)
                     var dr = (@ViewBag.CurrentTest.Speed) /10000 / mmPerInch * pxPerInch;
                     var colors;
@@ -99,7 +98,6 @@
                     var colors = ConvertColors(elements);
                     $(".testing").hide();
                     document.getElementById("StartTesting").onclick = StartTesting;
-
 
                     function ClearCanvas(){
                         context.rect(0, 0, canvas.width, canvas.height);
