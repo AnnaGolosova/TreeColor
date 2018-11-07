@@ -94,13 +94,15 @@ namespace TreeColor.Controllers
                 return View(model);
             }
 
-
             ApplicationUser existsUser = null;
-            foreach(Users u in DBcontext.Users.ToList())
-                if(u.CompareTo(model))
+            foreach (Users u in DBcontext.Users.ToList())
+            {
+                if (u.CompareTo(model))
                 {
-                    existsUser = UserManager.FindById(u.NewId);
+                    if (u.NewId != null)
+                        existsUser = UserManager.FindById(u.NewId);
                 }
+            }
 
             if (existsUser == null)
             {
@@ -109,22 +111,26 @@ namespace TreeColor.Controllers
                 var newUser = new ApplicationUser { UserName = model.Activity + model.Age + model.Gender + "@gmail.com",
                     Email = model.Activity + model.Age + model.Gender + "@gmail.com"
                 };
-                var res = await UserManager.CreateAsync(new ApplicationUser() { UserName = "adminTest@gsu.by", Email = "adminTest@gsu.by" }, "adminPassword");
                 var newResult = await UserManager.CreateAsync(newUser, password);
-                DBcontext.Users.Add(new Users()
-                {
-                    Activity = model.Activity,
-                    Age = model.Age,
-                    Gender = model.Gender,
-                    id = model.id
-                });
-                await DBcontext.SaveChangesAsync();
                 if (newResult.Succeeded)
                 {
                     await SignInManager.SignInAsync(newUser, isPersistent: false, rememberBrowser: false);
+                    DBcontext.Users.Add(new Users()
+                    {
+                        Activity = model.Activity,
+                        Age = model.Age,
+                        Gender = model.Gender,
+                        id = model.id,
+                        NewId = newUser.Id
+                    });
+                    await DBcontext.SaveChangesAsync();
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(newResult);
+                else
+                {
+                    ViewBag.Errors = newResult.Errors;
+                    return View();
+                }
             }
 
             // This doesn't count login failures towards account lockout

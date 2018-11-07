@@ -41,6 +41,13 @@
             {
                 @Html.AntiForgeryToken()
                 <h4>Или расскажите о себе</h4>
+                if (ViewBag.Errors != null)
+                {
+                    foreach (string s in ViewBag.Errors)
+                    {
+                        <h6 style="color:red;">s</h6>
+                    }
+                }
                 <hr />
                 <h5>Выберите род деятельности:</h5>
                 <div class="row">
