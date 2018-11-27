@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ThreeColor.Server.Models
+namespace ThreeColor.Data.Models
 {
     public enum ErrorCodes
     {

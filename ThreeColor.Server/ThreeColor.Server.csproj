@@ -257,28 +257,18 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IAsyncRepository.cs" />
+    <Compile Include="Abstract\IDataRepository.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\OrderController.cs" />
-    <Compile Include="Data\AuthRepository.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Data\AuthDataContext.cs" />
-    <Compile Include="Data\Repositories\AsyncEventRepository.cs" />
+    <Compile Include="Data\AuthRepository.cs" />
     <Compile Include="Data\Repositories\DataRepository.cs" />
     <Compile Include="Data\TestContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ErrorCodes.cs" />
-    <Compile Include="Models\Point.cs" />
-    <Compile Include="Models\Result.cs" />
-    <Compile Include="Models\Test.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Models\WithoutMapping\Points.cs" />
-    <Compile Include="Models\WithoutMapping\Results.cs" />
-    <Compile Include="Models\WithoutMapping\Tests.cs" />
-    <Compile Include="Models\WithoutMapping\Users.cs" />
+    <Compile Include="Helpers\ReturnDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Startup.cs" />
@@ -297,7 +287,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="DataBase\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThreeColor.Data\ThreeColor.Data.csproj">
+      <Project>{d8b59b78-32d7-48f7-a160-8a43b4dea771}</Project>
+      <Name>ThreeColor.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

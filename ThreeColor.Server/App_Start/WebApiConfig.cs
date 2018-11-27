@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 
-namespace TreeColor.Server
+namespace ThreeColor.Server
 {
     public static class WebApiConfig
     {

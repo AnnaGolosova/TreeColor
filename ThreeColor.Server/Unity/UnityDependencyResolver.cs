@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http.Dependencies;
 
-namespace TreeColor.Server.Unity
+namespace ThreeColor.Server.Unity
 {
     public class UnityResolver : IDependencyResolver
     {

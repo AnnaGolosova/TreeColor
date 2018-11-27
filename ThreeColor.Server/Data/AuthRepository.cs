@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using TreeColor.Server.Models;
+using ThreeColor.Data.Models;
 
-namespace TreeColor.Server.Data
+namespace ThreeColor.Server.Data
 {
     public class AuthRepository : IDisposable
     {

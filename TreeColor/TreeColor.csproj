@@ -260,6 +260,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\ExtentionMethods.cs" />
+    <Compile Include="Utils\HttpUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\human-female.png" />

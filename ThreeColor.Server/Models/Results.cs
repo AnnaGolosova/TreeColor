@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ThreeColor.Data.Models
+namespace ThreeColor.Server.Models
 {
-    public class Result
+    public class Results
     {
         public int Id { get; set; }
         public int TestingNumber { get; set; }
@@ -14,7 +14,7 @@ namespace ThreeColor.Data.Models
         public ErrorCodes ErrorCode { get; set; }
         public DateTime Date { get; set; }
 
-        public virtual Point Point { get; set; }
-        public virtual User User { get; set; }
+        public virtual Points Point { get; set; }
+        public virtual Users User { get; set; }
     }
 }

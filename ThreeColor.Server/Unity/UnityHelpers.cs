@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Practices.Unity;
 using System.Linq;
-using TreeColor.Server.Data;
+using ThreeColor.Server.Data;
+using ThreeColor.Server.Data.Repositories;
+using ThreeColor.Server.Abstract;
 
-namespace TreeColor.Server.Unity
+namespace ThreeColor.Server.Unity
 {
     public static class UnityHelpers
     {
@@ -44,8 +46,9 @@ namespace TreeColor.Server.Unity
             var myAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("SelfHostWebApiOwin")).ToArray();
 
             container.RegisterType(typeof(Startup));
-            
+
             container.RegisterType<TestContext, TestContext>();
+            container.RegisterType<IDataRepository, DataRepository>();
 
             container.RegisterTypes(
                 UnityHelpers.GetTypesWithCustomAttribute<UnityIoCTransientLifetimeAttribute>(myAssemblies),

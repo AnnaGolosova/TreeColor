@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ThreeColor.Data.Models
+namespace ThreeColor.Server.Models
 {
-    public class User
+    public class Users
     {
         public int Id { get; set; }
         public int Age { get; set; }
@@ -12,6 +12,6 @@ namespace ThreeColor.Data.Models
         public string Gender { get; set; }
         public Guid NewId { get; set; }
 
-        public virtual IEnumerable<Result> Results { get; set; }
+        public virtual IEnumerable<Results> Results { get; set; }
     }
 }

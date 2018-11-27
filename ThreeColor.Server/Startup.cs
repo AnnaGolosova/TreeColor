@@ -3,10 +3,10 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
 using System.Web.Http;
-using TreeColor.Server.Unity;
+using ThreeColor.Server.Unity;
 
-[assembly: OwinStartup(typeof(TreeColor.Server.Startup))]
-namespace TreeColor.Server
+[assembly: OwinStartup(typeof(ThreeColor.Server.Startup))]
+namespace ThreeColor.Server
 {
     public class Startup
     {
@@ -20,6 +20,7 @@ namespace TreeColor.Server
 
             WebApiConfig.Register(config);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            
             app.UseWebApi(config);
         }
 
