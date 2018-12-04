@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using System.Web.Configuration;
+using System.Text;
+using TreeColor.Models;
 
 namespace TreeColor.Utils
 {
@@ -21,15 +24,22 @@ namespace TreeColor.Utils
         public static HttpClient HttpClient => _httpClient ?? (_httpClient = CreateHttpClient());
 
         /// <summary>
+        /// Sets token to headers
+        /// </summary>
+        /// <param name="token"></param>
+        public static void SetAuthorizationHeader(string token)
+        {
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        /// <summary>
         /// Performs a GET request.
         /// </summary>
         /// <typeparam name="T">a type of the items</typeparam>
         /// <param name="url">requested url</param>
-        /// <param name="locale">En/Ru locale</param>
-        public static async Task<T> GetAsync<T>(string url)
-            where T : class
+        public static async Task<ReturnDataModel<T>> GetAsync<T>(string url)
         {
-            T result = default(T);
+            var dataModel = new ReturnDataModel<T>();
             string json = null;
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
@@ -45,6 +55,8 @@ namespace TreeColor.Utils
                     if (response.IsSuccessStatusCode) tryNumber = MaxTries;
                     else
                     {
+                        if (response.StatusCode == HttpStatusCode.Forbidden)
+                            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpUtil.GetToken().Result);
                         var oldRequest = request;
                         request = request.Clone();
                         oldRequest.Dispose();
@@ -52,7 +64,7 @@ namespace TreeColor.Utils
                 }
                 catch (HttpRequestException ex)
                 {
-                    throw ex;
+                    dataModel.LoadException(ex);
                 }
                 finally
                 {
@@ -63,10 +75,80 @@ namespace TreeColor.Utils
             if (response.IsSuccessStatusCode)
             {
                 json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                result = JsonConvert.DeserializeObject<T>(json);
+                dataModel.Data = JsonConvert.DeserializeObject<T>(json);
             }
 
-            return result;
+            return dataModel;
+        }
+
+        /// <summary>
+        /// Performs PUT request to the API and returns JSON as an answer
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="pathSegment">for example api/Test/All</param>
+        /// <returns></returns>
+        public static async Task<ReturnDataModel<T>> PutAsync<T>(object data, string pathSegment)
+        {
+            var dataModel = new ReturnDataModel<T>();
+
+            var json = JsonConvert.SerializeObject(data);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, pathSegment);
+            request.Content = content;
+
+            HttpResponseMessage responseContent = null;
+            try
+            {
+                responseContent = await HttpClient.SendAsync(request).ConfigureAwait(false);
+            }
+            catch (HttpRequestException ex)
+            {
+                dataModel.LoadException(ex);
+            }
+
+            if (responseContent.IsSuccessStatusCode)
+            {
+                var jsonResponce = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
+                dataModel.Data = JsonConvert.DeserializeObject<T>(jsonResponce);
+            }
+
+            return dataModel;
+        }
+
+        /// <summary>
+        /// Performs POST request to the API and returns JSON as an answer
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="pathSegment">for example api/Test/All</param>
+        /// <returns></returns>
+        public static async Task<ReturnDataModel<T>> PostAsync<T>(object data, string pathSegment)
+        {
+            var dataModel = new ReturnDataModel<T>();
+
+            var json = JsonConvert.SerializeObject(data);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, pathSegment);
+            request.Content = content;
+
+            HttpResponseMessage responseContent = null;
+            try
+            {
+                responseContent = await HttpClient.SendAsync(request).ConfigureAwait(false);
+            }
+            catch (HttpRequestException ex)
+            {
+                dataModel.LoadException(ex);
+            }
+
+            if (responseContent.IsSuccessStatusCode)
+            {
+                var jsonResponce = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
+                dataModel.Data = JsonConvert.DeserializeObject<T>(jsonResponce);
+            }
+
+            return dataModel;
         }
 
         /// <summary>
@@ -103,9 +185,61 @@ namespace TreeColor.Utils
             var httpClient = new HttpClient();
 
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "-a-gqUTH2sffClCQ8uWC-_NzO0y9QByZk3kTRaz4M5NJExfut9ejD1_f2BTde7raJTjanZ2yGh5MMtxlVshLY-7Xc1a8k3_15FcbIjTNG0KqEaW9ufQp0tlNnlhg4fjXTcCk82AO8tXj8KrputiAuM9p-PfNh4yETv23fYiQ9UPbckfeHQ1Z5pXK3W2EtUTSArob4bj-35oICxRxIrJqAqWFPbAX_ObIH7-R9Uwj9jwCOmDIGGPEbh-LcB0LIjFY");
+
+            httpClient.BaseAddress = new Uri(WebConfigurationManager.AppSettings["ServerUrl"]);
 
             return httpClient;
         }
 
+        public static async Task<string> GetToken()
+        {
+            string token = null;
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, WebConfigurationManager.AppSettings["ServerUrl"] + "token");
+
+            HttpResponseMessage response = null;
+            int tryNumber = 0;
+
+            while (tryNumber < MaxTries)
+            {
+                try
+                {
+                    var client = new HttpClient();
+                    var requestContent = string.Format("username={0}&password={1}&grant_type={2}", Uri.EscapeDataString("adminTest@gsu.by"),
+                        Uri.EscapeDataString("adminPassword"), Uri.EscapeDataString("password"));
+                    request.Content = new StringContent(requestContent, Encoding.UTF8, "application/x-www-form-urlencoded");
+                    
+                    response = await client.SendAsync(request);
+
+                    if (response.IsSuccessStatusCode) tryNumber = MaxTries;
+                    else
+                    {
+                        var oldRequest = request;
+                        request = request.Clone();
+                        oldRequest.Dispose();
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw ex;
+                }
+                catch(Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    tryNumber++;
+                }
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                token = JsonConvert.DeserializeObject<TokenModel>(json).access_token;
+            }
+
+            return token;
+        }
     }
 }

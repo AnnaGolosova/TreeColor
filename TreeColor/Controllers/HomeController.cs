@@ -3,29 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using TreeColor.Models;
+using ThreeColor.Data.Models;
+using TreeColor.Utils;
 
 namespace TreeColor.Controllers
 {
     public class HomeController : BaseController
     {
         [Authorize]
-        public ActionResult Index(bool showResults = false)
+        public async ActionResult Index(bool showResults = false)
         {
             try
             {
-                ViewBag.TestingNumber = DBcontext.Results.Max(r => r.testingnumber) + 1 ?? 1;
-                ViewBag.Tests = DBcontext.Tests.AsNoTracking().ToList();
+                var testingNumber = await HttpUtil.GetAsync<int>("api/Test/LastNumber");
+                if(testingNumber.IsSuccess)
+                    ViewBag.TestingNumber = testingNumber.Data;
+                else
+                {
+                    FillReturnDataModel(testingNumber);
+                    return View();
+                }
+
+                var tests = await HttpUtil.GetAsync<List<Tests>>("api/Test/All");
+                if (tests.IsSuccess)
+                    ViewBag.Tests = tests.Data;
+                else
+                {
+                    FillReturnDataModel(testingNumber);
+                    return View();
+                }
 
                 if(showResults)
                 {
-                    if(ViewBag.Result = DBcontext.Results
-                        .Any(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber)))
-                        ViewBag.Result = DBcontext.Results
-                            .Where(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber))
-                            .Average(r => r.tim);
-                    ViewBag.Average = DBcontext.Results.Where(r => r.Points.testid == DBcontext.Results.Where(res => res.testingnumber == DBcontext.Results.Max(rr => rr.testingnumber)).FirstOrDefault().Points.testid).Average(r => r.tim);
-                    ViewBag.ErrorAmount = DBcontext.Results.Where(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber)).Count(r => r.error > 0);
+                    var results = await HttpUtil.GetAsync<List<Results>>("api/Result/Last");
+                    if (!tests.IsSuccess)
+                    {
+                        FillReturnDataModel(testingNumber);
+                        return View();
+                    }
+                    else
+                    {
+
+                        if (results.Data.Count > 0)
+                            ViewBag.Result = results.Data.Average(r => r.Time);
+                        //AverageTime/{testId}
+                        ViewBag.Average = await HttpUtil.GetAsync<List<Results>>("api/Result/AverageTime/" + );
+                        ViewBag.ErrorAmount = DBcontext.Results.Where(r => r.testingnumber == DBcontext.Results.Max(res => res.testingnumber)).Count(r => r.error > 0);
+                    }
                 }
                 else
                 {
@@ -92,6 +116,12 @@ namespace TreeColor.Controllers
             {
                 return Json(e.Message);
             }
+        }
+
+        private void FillReturnDataModel(ReturnDataModel data)
+        {
+            ViewBag.ErrorMessage = data.Message;
+            ViewBag.Exception = data.Exception;
         }
     }
 }

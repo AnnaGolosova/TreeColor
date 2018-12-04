@@ -290,12 +290,6 @@
     <Folder Include="DataBase\" />
     <Folder Include="Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ThreeColor.Data\ThreeColor.Data.csproj">
-      <Project>{d8b59b78-32d7-48f7-a160-8a43b4dea771}</Project>
-      <Name>ThreeColor.Data</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

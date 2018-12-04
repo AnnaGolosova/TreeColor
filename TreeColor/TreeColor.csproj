@@ -156,6 +156,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="ThreeColor.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\ThreeColor.Data.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -254,6 +258,7 @@
     <Compile Include="Models\Tests.cs">
       <DependentUpon>TestEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\Users.cs">
       <DependentUpon>TestEntities.tt</DependentUpon>
     </Compile>
@@ -261,6 +266,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\ExtentionMethods.cs" />
     <Compile Include="Utils\HttpUtil.cs" />
+    <Compile Include="Utils\ReturnDataModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\human-female.png" />
@@ -272,6 +278,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Libs\ThreeColor.Data.dll" />
     <Content Include="Models\TestEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TestEntities.edmx</DependentUpon>

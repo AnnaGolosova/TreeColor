@@ -12,6 +12,7 @@ using TreeColor.Models;
 using TreeColor.Utils;
 using System.Text;
 using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace TreeColor.Controllers
 {
@@ -71,6 +72,9 @@ namespace TreeColor.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(Users model, string returnUrl, bool asAdmin = false)
         {
+            var res1 = await HttpUtil.GetToken();
+            var res = await HttpUtil.GetAsync<List<Tests>>("http://localhost:50863/api/test/all");
+
             if(asAdmin)
             {
                 try
