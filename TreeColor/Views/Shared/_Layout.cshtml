@@ -10,30 +10,36 @@
         <link type="text/css" rel="stylesheet" href="~/Content/materialize.min.css" media="screen,projection" />
     </head>
     <body>
-        <ul id="dropdown2" class="dropdown-content">
-            @using (Html.BeginForm("ChangeTest", "Home"))
-            {
-                if (ViewBag.Tests != null)
+        <div style="min-height:75%;">
+            <ul id="dropdown2" class="dropdown-content">
+                @using (Html.BeginForm("ChangeTest", "Home"))
                 {
-                    foreach (ThreeColor.Data.Models.Tests test in ViewBag.Tests)
+                    if (ViewBag.Tests != null)
                     {
-                        <li><a href=@Url.Action("ChangeTest", "Home", new { id = test.Id})>@test.Name</a></li>
+                        foreach (ThreeColor.Data.Models.Tests test in ViewBag.Tests)
+                        {
+                            <li><a href=@Url.Action("ChangeTest", "Home", new { id = test.Id})>@test.Name</a></li>
+                        }
                     }
                 }
-            }
-        </ul>
-        <nav>
-            <div class="nav-wrapper">
-                <a href="#!" class="brand-logo">ThreeColor</a>
-                <ul class="right hide-on-med-and-down">
+            </ul>
+            <nav>
+                <div class="nav-wrapper">
+                    <a href="#!" class="brand-logo">ThreeColor</a>
+                    <ul class="right hide-on-med-and-down">
                    
-                    <li><a href="sass.html">@ViewBag.TestName</a></li>
-                    <li  onclick="location.href = '/Account/LogOff';"><a class="dropdown-button" href="/Account/LogOff">Сменить пользователя</a></li>
-                    <li><a class="dropdown-button" href="#!" data-activates="dropdown2">Выберите тест <i class="material-icons right">arrow_drop_down</i></a></li>
-                </ul>
-            </div>
+                        <li><a href="sass.html">@ViewBag.TestName</a></li>
+                        <li onclick="location.href = '/Account/LogOff';"><a class="dropdown-button" href="/Account/LogOff">Сменить пользователя</a></li>
+                        <li onclick="location.href = '/Home/ForDevelopers';"><a class="dropdown-button" href="/Home/ForDevelopers">Для разработчиков</a></li>
+                        <li><a class="dropdown-button" href="#!" data-activates="dropdown2">Выберите тест <i class="material-icons right">arrow_drop_down</i></a></li>
+                    </ul>
+                </div>
 
-        </nav>
-            @RenderBody()
+            </nav>
+                @RenderBody()
+        </div>
+        <footer class="page-footer">
+            @Html.Action("ForDevelopers", "Home")
+        </footer>
     </body>
 </html>

@@ -55,5 +55,37 @@ namespace TreeColor.Utils
 #endif
             }
         }
+
+        public static string Mode
+        {
+            get
+            {
+#if DEBUG
+                return "DEBUG";
+#elif RELEASE
+                return "RELEASE";
+#elif LOCAL_TEST
+                return "LOCAL_TEST";
+#elif LOCAL_PROD
+                return "LOCAL_PROD";
+#endif
+            }
+        }
+
+        public static System.Configuration.ConnectionStringSettings ConnectionObject
+        {
+            get
+            {
+#if DEBUG
+                return WebConfigurationManager.ConnectionStrings["TestConnection"];
+#elif RELEASE
+                return WebConfigurationManager.ConnectionStrings["ProdConnection"];
+#elif LOCAL_TEST
+                return WebConfigurationManager.ConnectionStrings["TestConnection"];
+#elif LOCAL_PROD
+                return WebConfigurationManager.ConnectionStrings["ProdConnection"];
+#endif
+            }
+        }
     }
 }

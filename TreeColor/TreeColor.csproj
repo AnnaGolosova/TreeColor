@@ -246,6 +246,7 @@
     <Compile Include="Utils\ReturnDataModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\404_error.png" />
     <Content Include="Content\human-female.png" />
     <Content Include="Content\human-male.png" />
     <Content Include="Content\materialize.css" />
@@ -326,6 +327,7 @@
     <Content Include="Views\Settings\SettingsTest.cshtml" />
     <Content Include="Views\Settings\CreateTest.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Home\ForDevelopers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -34,11 +34,10 @@ namespace TreeColor.Controllers
         [AllowAnonymous]
         public ActionResult ForDevelopers()
         {
-
             ViewBag.Server = ConfigManager.ServerName;
-            ViewBag.Server =
-            ViewBag.Server =
-            return View();
+            ViewBag.Connection = ConfigManager.ConnectionObject;
+            ViewBag.Mode = ConfigManager.Mode;
+            return PartialView();
         }
 
         [Authorize]

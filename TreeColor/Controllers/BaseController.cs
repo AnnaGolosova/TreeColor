@@ -9,12 +9,6 @@ namespace TreeColor.Controllers
 {
     public class BaseController : Controller
     {
-        public static UserDbContext UserDB;
-
-        static BaseController()
-        {
-            if (UserDB == null)
-                UserDB = new UserDbContext();
-        }
+        static BaseController() { }
     }
 }
