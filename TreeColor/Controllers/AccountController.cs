@@ -13,6 +13,7 @@ using TreeColor.Utils;
 using System.Text;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using ThreeColor.Data.Models;
 
 namespace TreeColor.Controllers
 {
@@ -72,16 +73,14 @@ namespace TreeColor.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(Users model, string returnUrl, bool asAdmin = false)
         {
-            var res1 = await HttpUtil.GetToken();
-            var res = await HttpUtil.GetAsync<List<Tests>>("http://localhost:50863/api/test/all");
-
             if(asAdmin)
             {
                 try
                 {
-                    if (string.Equals(model.Activity, "adminTest@gsu.by") && string.Equals(model.NewId, "adminPassword"))
+                    // Bad, bad practice!
+                    if (string.Equals(model.Activity, "adminTest@gsu.by") && string.Equals(model.Gender, "adminPassword"))
                     {
-                        await SignInManager.SignInAsync(UserManager.FindById("b90b3a12-2a08-4fca-9523-34217947404c"),  false,  false);
+                        await SignInManager.SignInAsync(UserManager.FindById(ConfigManager.AdminId),  false,  false);
                     }
                     else
                         throw new Exception();
@@ -98,17 +97,15 @@ namespace TreeColor.Controllers
                 return View(model);
             }
 
-            ApplicationUser existsUser = null;
-            foreach (Users u in DBcontext.Users.ToList())
+            var existsUser = await HttpUtil.PostAsync<Users>(model, "api/Account/User/Get");
+            
+            if(!existsUser.IsSuccess)
             {
-                if (u.CompareTo(model))
-                {
-                    if (u.NewId != null)
-                        existsUser = UserManager.FindById(u.NewId);
-                }
+                ViewBag.Errors = existsUser.Message;
+                return ViewBag();
             }
 
-            if (existsUser == null)
+            if (existsUser.Data == null)
             {
                 string password = Guid.NewGuid().ToString() + "!A";
 
@@ -119,15 +116,14 @@ namespace TreeColor.Controllers
                 if (newResult.Succeeded)
                 {
                     await SignInManager.SignInAsync(newUser, isPersistent: false, rememberBrowser: false);
-                    DBcontext.Users.Add(new Users()
+                    existsUser = await HttpUtil.PostAsync<Users>(new Users()
                     {
                         Activity = model.Activity,
                         Age = model.Age,
                         Gender = model.Gender,
-                        id = model.id,
-                        NewId = newUser.Id
-                    });
-                    await DBcontext.SaveChangesAsync();
+                        Id = model.Id,
+                        NewId = new Guid(newUser.Id)
+                    }, "api/Account/User/Add");
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -139,7 +135,7 @@ namespace TreeColor.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            await SignInManager.SignInAsync(existsUser, false, false);
+            await SignInManager.SignInAsync(UserManager.FindById(existsUser.Data.NewId.ToString()), false, false);
             return RedirectToLocal(returnUrl);
         }
 
@@ -492,7 +488,7 @@ namespace TreeColor.Controllers
             base.Dispose(disposing);
         }
 
-        #region Helpers
+#region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -549,6 +545,6 @@ namespace TreeColor.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-        #endregion
+#endregion
     }
 }

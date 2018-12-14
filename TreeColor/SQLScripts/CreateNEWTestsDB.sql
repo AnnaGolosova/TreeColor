@@ -24,7 +24,7 @@ CREATE TABLE [dbo].[Users](
 	[Age] [int] NULL,
 	[Activity] [varchar](50) NULL,
 	[Gender] [varchar](1) NULL,
-	[NewId] [varchar](256) NULL
+	[NewId] uniqueidentifier NULL
 ) 
 GO
 
@@ -114,3 +114,23 @@ GO
 CREATE NONCLUSTERED INDEX [IX_RoleId]
     ON [dbo].[AspNetUserRoles]([RoleId] ASC);
     
+Insert into AspNetUsers 
+values(
+    newID(), 
+    'adminTest@gsu.by', 
+    0, 
+    'AIl1q1bRbbbt5ih4veh03ptNjaHbcyn/2Y6m72oBgGYKA1+jQ6UeimVD4svmZA2t0Q==',
+    'f3b115d9-54e6-4522-8d52-dcc687b6ddba', 
+    null, 
+    0, 
+    0, 
+    null, 
+    1, 
+    0,
+    'adminTest@gsu.by')
+insert into AspNetRoles
+values(newId(), 'Admin')
+insert into AspNetUserRoles 
+select u.Id, r.Id
+from AspNetRoles r, AspNetUsers u
+

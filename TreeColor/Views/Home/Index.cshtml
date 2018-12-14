@@ -1,22 +1,36 @@
-﻿@using TreeColor.Models
-@model List<TreeColor.Models.Tests>
+﻿@using ThreeColor.Data.Models
+@model List<ThreeColor.Data.Models.Tests>
 @{
     ViewBag.Title = "Home Page";
+    Tests CurrentTest = ViewBag.CurrentTest;
+    List<Points> PointsForCurrentTest = ViewBag.PointsForCurrentTest;
 }
 
     @if (ViewBag.Result != null)
     {
-        <div class="results" style="text-align : center;">
-            <h5>
-                Спасибо за прохождение теста! <br />
-                Среднее время реации - @((ViewBag.Result/1000).ToString("N3")) mc<br />
-                Количество ошибок - @ViewBag.ErrorAmount <br />
-                Среднее время реакции для данного теста - @((ViewBag.Average/1000).ToString("N3")) mc
-            </h5>
+        <div id="parent" class="row" style="margin-top:20px;vertical-align:middle;align-content:center;width:100%;height:80%; padding:20px 20px 20px 20px">
+            <p >Спасибо за прохождение теста! <span style="color:red">Красной линией</span> отмечено время вашей реакции</p>
+            <div  id="insertHere"></div>
         </div>
     }
-
-    @if (ViewBag.CurrentTest != null)
+    @if (ViewBag.ErrorMessage != null || ViewBag.SuccessMessage != null)
+    {
+    <div class="row">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="card-panel red lighten-3" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="card-panel teal lighten-2" role="alert">
+                @ViewBag.SuccessMessage
+            </div>
+        }
+    </div>
+    }
+    @if (CurrentTest != null && PointsForCurrentTest!= null && PointsForCurrentTest.Count > 0)
     {
         <div class="row">
             <div class="col s2">
@@ -29,14 +43,14 @@
             <h5> Чтобы начать тестирование, нажмите "Начать" </h5>
         </div>
         <div class="row testing" style="height : 75%;">
-            @if (ViewBag.CurrentTest != null)
+            @if (CurrentTest != null)
             {
-                <div class="col s1" style="min-height: 100%; background-color : #@ViewBag.CurrentTest.field_color">
-                    @foreach (Points point in ViewBag.CurrentTest.Points)
+                <div class="col s1" style="min-height: 100%; background-color : #@CurrentTest.FieldColor">
+                    @foreach (Points point in PointsForCurrentTest)
                     {
-                        <h5 style="color : #@point.color">@point.Symbol</h5>
-                        <div hidden class="colors">@point.color</div>
-                        <div hidden class="keys">@point.Symbol</div>
+                        <h5 style="color : #@point.Color">@point.Key</h5>
+                        <div hidden class="colors">@point.Color</div>
+                        <div hidden class="keys">@point.Key</div>
                     }
                 </div>
                 <div class="col s11" id="CanvasParent" style="height: 100%;">
@@ -69,18 +83,18 @@
                     var currY;
                     var currX;
                     var timer;
-                    var testingNumber = @ViewBag.TestingNumber;
+                    var pointIds = [@string.Join(" ,",PointsForCurrentTest.Select(p => p.Id))]
 
                     function GenerateValues()
                     {
                         currX = Math.random() * (canvas.width - 100) + 50;
                         currY = Math.random() * (canvas.height - 100) + 50;
-                        timeForWait = Math.random() * (@ViewBag.CurrentTest.int_max - @ViewBag.CurrentTest.int_min) + @ViewBag.CurrentTest.int_min;
-                        pointId = Math.floor(Math.random() * @ViewBag.CurrentTest.Points.Count);
+                        timeForWait = Math.random() * (@CurrentTest.MaxInterval - @CurrentTest.MinInterval) + @CurrentTest.MinInterval;
+                        pointId = Math.floor(Math.random() * @PointsForCurrentTest.Count);
                     }
 
                     var allIsGood = false;
-                    var radius = (@(ViewBag.CurrentTest.Point_Size != null ? ViewBag.CurrentTest.Point_Size : 0)) / 10000 / mmPerInch * pxPerInch;
+                    var radius = (@CurrentTest.PointSize) / 10000 / mmPerInch * pxPerInch;
                     var count = 0;
                     var canvasDiv = document.getElementById('CanvasParent');
                     var canvas = document.getElementById('canvas');
@@ -89,7 +103,7 @@
                     var context = canvas.getContext('2d');
 
                     // прирашение радиуса (px/s)
-                    var dr = (@ViewBag.CurrentTest.Speed) /10000 / mmPerInch * pxPerInch;
+                    var dr = (@CurrentTest.Speed) /10000 / mmPerInch * pxPerInch;
                     var colors;
                     var elements = document.getElementsByClassName("colors");
                     ClearCanvas();
@@ -101,7 +115,7 @@
 
                     function ClearCanvas(){
                         context.rect(0, 0, canvas.width, canvas.height);
-                        context.fillStyle = '#@ViewBag.CurrentTest.field_color';
+                        context.fillStyle = '#@CurrentTest.FieldColor';
                         context.fill();
                     }
 
@@ -118,7 +132,7 @@
                                     context.beginPath();
                                     context.arc(currX, currY, radius, 0, 2 * Math.PI, false);
                                     context.fillStyle = '#' + elements[pointId].textContent;
-                                    context.strokeStyle = '#@ViewBag.CurrentTest.field_color';
+                                    context.strokeStyle = '#@CurrentTest.FieldColor';
                                     context.fill();
                                     context.stroke();
                                     time += 1000 / fps;
@@ -134,14 +148,16 @@
                     function press(event) {
                         if(allIsGood) {
                             var errCod = null;
-                            if(timeForWait > 0) errCod = 1;
-                            if(event.key.toLowerCase().localeCompare(keys[pointId].toLowerCase()) != 0) errCod = 2;
+                            if(timeForWait > 0) 
+                                errCod = 2;
+                            if(event.key.toLowerCase().localeCompare(keys[pointId].toLowerCase()) != 0) 
+                                errCod = 1;
                             var Result = {
-                                'testingnumber': testingNumber,
-                                'pointid' : pointId,
-                                'tim': time,
-                                'error' : errCod,
-                                'userid' : @ViewBag.CurrentTest.id,
+                                'TestingNumber': @ViewBag.TestingNumber,
+                                'PointId' : pointIds[pointId],
+                                'Time': time,
+                                'ErrorCode' : errCod,
+                                'UserId' : @ViewBag.CurrentUser.Id,
                             };
                             $.ajax({
                                 type: "POST",
@@ -160,7 +176,7 @@
                             $(".counter").text(count++ + "/30");
                             ClearCanvas();
                             time = 0;
-                            radius = (@ViewBag.CurrentTest.Point_Size) / 10000 / mmPerInch * pxPerInch;
+                            radius = (@CurrentTest.PointSize) / 10000 / mmPerInch * pxPerInch;
                             GenerateValues();
                         }
                         else {
@@ -169,6 +185,7 @@
                     }
 
                     function errorFunc(errorData) {
+                        // TODO: Add error handling
                         StopTesting();
                     }
 
@@ -219,10 +236,22 @@
             }
         </div>
         }
-        else if(ViewBag.ErrorMessage != null)
-        {
-        <div>
-            <p>@ViewBag.ErrorMessage</p>
-        </div>
-        }
 
+<script>
+    document.body.onload = addElement;
+
+    function addElement() {
+
+        // создаем новый элемент div
+        // и добавляем в него немного контента
+
+        var newImg = document.createElement("img");
+        var parent = document.getElementById("parent");
+
+        newImg.setAttribute("src", "/Home/CreateChart/?width=" + (parent.clientWidth - 40) + "&height=" + (parent.clientHeight - 40));
+        // добавляем только что созданый элемент в дерево DOM
+
+        var my_div = document.getElementById("insertHere");
+        parent.insertBefore(newImg, my_div);
+    }
+</script>

@@ -1,4 +1,4 @@
-﻿@using TreeColor.Models
+﻿@using ThreeColor.Data.Models
 @model Users
 @{
     ViewBag.Title = "Расскажите о себе";
@@ -20,7 +20,7 @@
                         <label for="last_name">Логин</label>
                     </div>
                     <div class="input-field col s6">
-                        <input id="pass" type="password" class="validate" name="model.NewId" @(Model != null ? $"value={Model.NewId}" : string.Empty)>
+                        <input id="pass" type="password" class="validate" name="model.Gender" @(Model != null ? $"value={Model.NewId}" : string.Empty)>
                         <label for="pass">Пароль</label>
                     </div>
                 </div>

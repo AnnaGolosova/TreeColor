@@ -87,5 +87,10 @@ CREATE NONCLUSTERED INDEX [IX_RoleId]
     ON [dbo].[AspNetUserRoles]([RoleId] ASC);
     
 
+insert into aspnetroles
+values(newid(), 'Admin')
 
-
+insert into aspnetuserroles 
+select [user].id, role.id
+from aspnetroles role, aspnetusers [user]
+where role.name = 'Admin' and [user].email='adminTest@gsu.by'

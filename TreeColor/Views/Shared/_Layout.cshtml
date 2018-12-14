@@ -1,10 +1,13 @@
 ﻿<html>
     <head>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link type="text/css" rel="stylesheet" href="~/Content/materialize.min.css" media="screen,projection" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script src="~/Scripts/jquery-3.2.1.js"></script>
         <script src="~/Scripts/jscolor.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="~/Scripts/materialize.min.js"></script>
+                @RenderSection("Scripts", false)
+        <link type="text/css" rel="stylesheet" href="~/Content/materialize.min.css" media="screen,projection" />
     </head>
     <body>
         <ul id="dropdown2" class="dropdown-content">
@@ -12,9 +15,9 @@
             {
                 if (ViewBag.Tests != null)
                 {
-                    foreach (TreeColor.Models.Tests test in ViewBag.Tests)
+                    foreach (ThreeColor.Data.Models.Tests test in ViewBag.Tests)
                     {
-                        <li><a href=@Url.Action("ChangeTest", "Home", new { id = test.id})>@test.test_name</a></li>
+                        <li><a href=@Url.Action("ChangeTest", "Home", new { id = test.Id})>@test.Name</a></li>
                     }
                 }
             }
@@ -32,8 +35,5 @@
 
         </nav>
             @RenderBody()
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <script src="~/Scripts/materialize.min.js"></script>
-        @RenderSection("Scripts", false)
     </body>
 </html>
