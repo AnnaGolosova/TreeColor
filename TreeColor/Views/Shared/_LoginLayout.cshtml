@@ -7,12 +7,20 @@
     <script src="~/Scripts/jscolor.js"></script>
     <script src="~/Scripts/nouislider.js"></script>
     <link href="~/Content/nouislider.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="~/Content/icon.ico" />
+    <link href="~/Content/style.css" rel="stylesheet" />
     <title>TreeColor</title>
 </head>
 <body>
+    <nav>
+        <div class="nav-wrapper teal darken-3" style="padding-left:10px;">
+            <a href="#!" class="brand-logo">ThreeColor</a>
+        </div>
+    </nav>
     @RenderBody()
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="~/Scripts/materialize.min.js"></script>
     @RenderSection("Scripts", false)
+   
 </body>
 </html>

@@ -6,8 +6,10 @@
         <script src="~/Scripts/jscolor.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="~/Scripts/materialize.min.js"></script>
+        <link href="~/Content/style.css" rel="stylesheet" />
                 @RenderSection("Scripts", false)
         <link type="text/css" rel="stylesheet" href="~/Content/materialize.min.css" media="screen,projection" />
+        <link rel="icon" type="image/png" href="~/Content/icon.ico" />
     </head>
     <body>
         <div style="min-height:75%;">
@@ -24,7 +26,7 @@
                 }
             </ul>
             <nav>
-                <div class="nav-wrapper">
+                <div class="nav-wrapper teal darken-3" style="padding-left:10px;">
                     <a href="#!" class="brand-logo">ThreeColor</a>
                     <ul class="right hide-on-med-and-down">
                    
@@ -38,7 +40,7 @@
             </nav>
                 @RenderBody()
         </div>
-        <footer class="page-footer">
+        <footer class="page-footer teal">
             @Html.Action("ForDevelopers", "Home")
         </footer>
     </body>

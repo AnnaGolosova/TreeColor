@@ -6,10 +6,12 @@
 }
 @using (Html.BeginForm("Login", "Account",  new { ReturnUrl = "/Settings/TestList", asAdmin = true}, FormMethod.Post, new { @class = "form-horizontal" }))
 {
-    <div class="row" style="margin-top:100px;">
-        <div class="col s8 z-depth-5 offset-s2">
-            <section style="padding-bottom:15px;">
-                <h4>Войти как преподаватель</h4>
+    <div class="row" style="margin-top:50px;">
+        <div class="col s8 z-depth-5 offset-s2 white" style="padding:0px;">
+            <!--<section style="padding-bottom:15px;">-->
+                <div class="dark-amber">
+                    <h4>Войти как преподаватель</h4>
+                </div>
                 @if(ViewBag.ErrorMessage != null)
                 {
                     <h6 style="color:red;">Неверный логин или пароль</h6>
@@ -25,106 +27,106 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="margin:0px 10px 10px 10px;">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Войти" class="btn btn-default" />
+                        <input type="submit" value="Войти" class="btn btn-default amber black-text" />
                     </div>
                 </div>
-            </section>
+            <!--</section>-->
+            </div>
         </div>
-    </div>
-}
-<div class="row">
-    <div class="col s8 z-depth-5 offset-s2">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", name = "MainForm" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Или расскажите о себе</h4>
-                if (ViewBag.Errors != null)
+    }
+    <div class="row" style="margin:40px 0px 50px 0px">
+        <div class="col s8 z-depth-5 offset-s2 white" style="padding:0px;">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", name = "MainForm" }))
                 {
-                    foreach (string s in ViewBag.Errors)
-                    {
-                        <h6 style="color:red;">s</h6>
-                    }
-                }
-                <hr />
-                <h5>Выберите род деятельности:</h5>
-                <div class="row">
-                    <div class="col s12">
-                        <ul class="tabs" style="height:100px;">
-                            <li class="tab col s3" style="line-height:inherit; height:inherit;"><a onclick="changeActivity(0)"><i class="material-icons medium">school</i><br />Школьник</a></li>
-                            <li class="tab col s3" style="line-height:inherit; height:inherit;"><a class="active" onclick="changeActivity(1)"><i class="material-icons medium">account_balance</i><br />Студент</a></li>
-                            <li class="tab col s3" style="line-height:inherit; height:inherit;"><a onclick="changeActivity(2)"><i class="material-icons medium">work</i><br />Рабочий</a></li>
-                        </ul>
-                        <select hidden name="Activity">
-                            <option value="Scoolboy"></option>
-                            <option value="Student"></option>
-                            <option value="Worker"></option>
-                        </select>
+                    @Html.AntiForgeryToken()
+                    <div class="dark-amber">
+                        <h4>Или расскажите о себе</h4>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col s8">
-                        <h5 id="rangeLabel">Выберите возраст : 18</h5>
-                        <p class="range-field" onchange="RangeChange()">
-                            <input id="range" type="range" name="Age" min="5" max="80" value="18" />
-                        </p>
-                    </div>
-                    <div class="col s3 offset-s1">
-                        <h5 id="rangeLabel">Выберите пол</h5>
-                        <div class="switch">
-                            <label>
-                                <img src="~/Content/human-female.png" onclick="SetFemale()" />
-                                <input type="checkbox" onclick="changeGender()">
-                                <span class="lever"></span>
-                                <img src="~/Content/human-male.png" onclick="SetMale()" />
-                            </label>
-                            <select hidden name="Gender">
-                                <option value="M"></option>
-                                <option value="F"></option>
-                            </select>
+                    <div style="padding:0px 10px 0px 10px">
+                        <h5>Выберите род деятельности:</h5>
+                        <div class="row">
+                            <div class="col s12">
+                                <ul class="tabs teal-text" style="height:100px;">
+                                    <li class="tab col s3" style="line-height:inherit; height:inherit;"><a class="teal-text" onclick="changeActivity(0)" style="cursor:pointer"><i class="material-icons medium teal-text">school</i><br />Школьник</a></li>
+                                    <li class="tab col s3" style="line-height:inherit; height:inherit;"><a style="cursor:pointer" class="teal-text active" onclick="changeActivity(1)"><i class="material-icons medium">account_balance</i><br />Студент</a></li>
+                                    <li class="tab col s3" style="line-height:inherit; height:inherit;"><a style="cursor:pointer" class="teal-text" onclick="changeActivity(2)"><i class="material-icons medium">work</i><br />Рабочий</a></li>
+                                    <div class="indicator teal" style="z-index:1"> </div>
+                                </ul>
+                                <select hidden name="Activity">
+                                    <option value="Scoolboy"></option>
+                                    <option value="Student"></option>
+                                    <option value="Worker"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s8">
+                                <h5 id="rangeLabel">Выберите возраст : 18</h5>
+                                <p class="range-field" onchange="RangeChange()">
+                                    <input id="range" type="range" name="Age" min="5" max="80" value="18" />
+                                </p>
+                            </div>
+                            <div class="col s3 offset-s1">
+                                <h5 id="rangeLabel">Выберите пол</h5>
+                                <div class="switch">
+                                    <label>
+                                        <img src="~/Content/human-female.png" onclick="SetFemale()" />
+                                        <input type="checkbox" onclick="changeGender()">
+                                        <span class="lever"></span>
+                                        <img src="~/Content/human-male.png" onclick="SetMale()" />
+                                    </label>
+                                    <select hidden name="Gender">
+                                        <option value="M"></option>
+                                        <option value="F"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Начать тестирование" class="btn btn-default amber black-text" />
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Начать тестирование" class="btn btn-default" />
-                    </div>
-                </div>
-            }
-        </section>
+                }
+        </div>
     </div>
-</div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
-<script type="text/javascript">
-    var select = document.forms.MainForm.elements.Activity;
-    select.selectedIndex = 1;
-    document.forms.MainForm.elements.Gender.selectedIndex = 1;
-
-    function changeActivity(Id) {
-        select.selectedIndex = Id;
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
     }
-
-    function RangeChange() {
-        document.getElementById("rangeLabel").innerHTML = "Выберите возраст : " + document.getElementById("range").value;
-    }
-
-    function changeGender() {
-        document.forms.MainForm.elements.Gender.selectedIndex =
-            document.forms.MainForm.elements.Gender.selectedIndex == 0 ?
-            1 : 0;
-    }
-
-    function SetMale() {
-        document.forms.MainForm.elements.Gender.selectedIndex = 0;
-    }
-
-    function SetFemale() {
+    <script type="text/javascript">
+        var select = document.forms.MainForm.elements.Activity;
+        select.selectedIndex = 1;
         document.forms.MainForm.elements.Gender.selectedIndex = 1;
-    }
-</script>
+
+        function changeActivity(Id) {
+            select.selectedIndex = Id;
+        }
+
+        function RangeChange() {
+            document.getElementById("rangeLabel").innerHTML = "Выберите возраст : " + document.getElementById("range").value;
+        }
+
+        function changeGender() {
+            document.forms.MainForm.elements.Gender.selectedIndex =
+                document.forms.MainForm.elements.Gender.selectedIndex == 0 ?
+                1 : 0;
+        }
+
+        function SetMale() {
+            document.forms.MainForm.elements.Gender.selectedIndex = 0;
+        }
+
+        function SetFemale() {
+            document.forms.MainForm.elements.Gender.selectedIndex = 1;
+        }
+    </script>
+    <style>
+        #indicator{
+            background-color:teal;
+        }
+    </style>

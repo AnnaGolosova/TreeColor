@@ -37,11 +37,13 @@ namespace TreeColor.Controllers
             ViewBag.Server = ConfigManager.ServerName;
             ViewBag.Connection = ConfigManager.ConnectionObject;
             ViewBag.Mode = ConfigManager.Mode;
+            ViewBag.Version = this.GetType().Assembly.GetName().Version;
             return PartialView();
         }
 
         [Authorize]
         public async Task<ActionResult> Index(bool showResults = false)
+
         {
             try
             {

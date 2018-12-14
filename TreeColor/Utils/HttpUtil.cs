@@ -57,7 +57,7 @@ namespace TreeColor.Utils
                     {
                         if (response.StatusCode == HttpStatusCode.Unauthorized)
                         {
-                            string token = HttpUtil.GetToken().Result;
+                            string token = await HttpUtil.GetToken();
                             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
                         }

@@ -1,0 +1,13 @@
+﻿.dark-amber {
+    background-color:#c79100;
+}
+
+.dark-amber h4{
+    margin-top:0px;
+    padding:10px;
+}
+.no-shadow{
+    box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 
+        0 6px  20px 5px rgba(0,0,0,0.12), 
+        0 8px 10px -5px rgba(0,0,0,0.3);
+}

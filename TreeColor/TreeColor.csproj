@@ -249,13 +249,17 @@
     <Content Include="Content\404_error.png" />
     <Content Include="Content\human-female.png" />
     <Content Include="Content\human-male.png" />
+    <Content Include="Content\icon.ico" />
+    <Content Include="Content\icon.png" />
     <Content Include="Content\materialize.css" />
     <Content Include="Content\materialize.min.css" />
     <Content Include="Content\nouislider.css" />
     <Content Include="Content\nouislider.min.css" />
+    <Content Include="Content\style.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="icon.ico" />
     <Content Include="Libs\ThreeColor.Data.dll" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
@@ -359,6 +363,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Local_Prod|AnyCPU'">
     <OutputPath>bin\</OutputPath>
     <DefineConstants>LOCAL_PROD</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
