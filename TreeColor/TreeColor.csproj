@@ -284,7 +284,6 @@
     <Content Include="Content\human-female.png" />
     <Content Include="Content\human-male.png" />
     <Content Include="Content\icon.ico" />
-    <Content Include="Content\icon.png" />
     <Content Include="Content\materialize.css" />
     <Content Include="Content\materialize.min.css" />
     <Content Include="Content\nouislider.css" />
