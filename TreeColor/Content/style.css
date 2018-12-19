@@ -1,13 +1,18 @@
-﻿.dark-amber {
-    background-color:#c79100;
+﻿html,
+body {
+  height: 100%;
 }
-
-.dark-amber h4{
-    margin-top:0px;
-    padding:10px;
+.wrapper {
+  position: relative;
+  min-height: 100%;
 }
-.no-shadow{
-    box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 
-        0 6px  20px 5px rgba(0,0,0,0.12), 
-        0 8px 10px -5px rgba(0,0,0,0.3);
+.body {
+  padding-bottom: 290px;
+}
+footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 280px;
 }

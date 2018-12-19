@@ -277,7 +277,7 @@ namespace TreeColor.Controllers
             seriesDetail.IsValueShownAsLabel = false;
             seriesDetail.Color = Color.FromArgb(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255));
             seriesDetail.ChartType = SeriesChartType.Line;
-            seriesDetail.BorderWidth = 1;
+            seriesDetail.BorderWidth = 2;
             DataPoint point;
 
             List<double> allRes = results
@@ -310,22 +310,22 @@ namespace TreeColor.Controllers
         {
             Series firstErrorColumns = new Series();
             firstErrorColumns.Name = "количество ошибок первого типа(неверная клавиша)";
-            firstErrorColumns.IsValueShownAsLabel = false;
             firstErrorColumns.Color = Color.FromArgb((int)(255*0.5), _random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255));
             firstErrorColumns.ChartType = SeriesChartType.Column;
+            firstErrorColumns.IsValueShownAsLabel = true;
 
             Series secondErrorColumns = new Series();
             secondErrorColumns.Name = "количество ошибок первого второго типа(преждевременная реакция)";
-            secondErrorColumns.IsValueShownAsLabel = false;
             secondErrorColumns.Color = Color.FromArgb((int)(255 * 0.5), _random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255));
             secondErrorColumns.ChartType = SeriesChartType.Column;
+            secondErrorColumns.IsValueShownAsLabel = true;
 
             Series seriesDetail = new Series();
             seriesDetail.Name = "Для всех тестов";
             seriesDetail.IsValueShownAsLabel = false;
             seriesDetail.Color = Color.FromArgb(_random.Next(0, 255), _random.Next(0, 255), _random.Next(0, 255));
             seriesDetail.ChartType = SeriesChartType.Line;
-            seriesDetail.BorderWidth = 2;
+            seriesDetail.BorderWidth = 1;
             DataPoint point;
 
             List<ResultViewModel> array = results
@@ -340,8 +340,23 @@ namespace TreeColor.Controllers
 
             var beg = array.Min(r => r.Time);
             var end = array.Max(r => r.Time);
+            int maxValueByErrors = -1;
+            int maxValueByResults = -1;
 
-            for(double i = beg; i < end; i+= interval)
+            for (double i = beg; i < end; i+= interval)
+            {
+                List<ResultViewModel> currentSequence = array.Where(r => r.Time > i && r.Time < i + interval).ToList();
+                if (currentSequence.Count() > maxValueByResults)
+                    maxValueByResults = currentSequence.Count();
+                if (currentSequence.Sum(r => r.FirstErrorCount) > maxValueByErrors)
+                    maxValueByErrors = currentSequence.Sum(r => r.FirstErrorCount);
+                if (currentSequence.Sum(r => r.SecondErrorCount) > maxValueByErrors)
+                    maxValueByErrors = currentSequence.Sum(r => r.SecondErrorCount);
+            }
+
+            double index = maxValueByErrors / maxValueByResults;
+
+            for (double i = beg; i < end; i += interval)
             {
                 List<ResultViewModel> currentSequence = array.Where(r => r.Time > i && r.Time < i + interval).ToList();
                 point = new DataPoint();
@@ -349,11 +364,13 @@ namespace TreeColor.Controllers
                 seriesDetail.Points.Add(point);
 
                 point = new DataPoint();
-                point.SetValueXY(Math.Round(i, 2), currentSequence.Sum(r => r.FirstErrorCount));
+                point.Label = currentSequence.Sum(r => r.FirstErrorCount).ToString();
+                point.SetValueXY(Math.Round(i, 2), currentSequence.Sum(r => r.FirstErrorCount)/index);
                 firstErrorColumns.Points.Add(point);
 
                 point = new DataPoint();
-                point.SetValueXY(Math.Round(i, 2), currentSequence.Sum(r => r.SecondErrorCount));
+                point.Label = currentSequence.Sum(r => r.FirstErrorCount).ToString();
+                point.SetValueXY(Math.Round(i, 2), currentSequence.Sum(r => r.SecondErrorCount) / index);
                 secondErrorColumns.Points.Add(point);
             }
 
@@ -385,6 +402,8 @@ namespace TreeColor.Controllers
             chartArea.AxisY.MajorGrid.LineColor = Color.FromArgb(64, 64, 64, 64);
             chartArea.AxisX.MajorGrid.LineColor = Color.FromArgb(64, 64, 64, 64);
             chartArea.AxisX.Interval = 1;
+            chartArea.AxisY.Title = "Количество тестов с такими результатами";
+            chartArea.AxisX.Title = "Среднее время реакции за тест, мс";
 
             return chartArea;
         }

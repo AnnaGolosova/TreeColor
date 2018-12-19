@@ -9,14 +9,14 @@
     <div class="row" style="margin-top:50px;">
         <div class="col s8 z-depth-5 offset-s2 white" style="padding:0px;">
             <!--<section style="padding-bottom:15px;">-->
-                <div class="dark-amber">
-                    <h4>Войти как преподаватель</h4>
+                <div class="teal white-text">
+                    <h4 style="margin-top:0px;margin-bottom:0px;padding:10px;">Войти как преподаватель</h4>
                 </div>
                 @if(ViewBag.ErrorMessage != null)
                 {
                     <h6 style="color:red;">Неверный логин или пароль</h6>
                 }
-                <div class="row">
+                <div class="row" style="margin-top:12.3px;">
                     <div class="input-field col s6">
                         <input id="last_name" type="text" class="validate" name="model.Activity" @(Model != null ? $"value={Model.Activity}" : string.Empty)>
                         <label for="last_name">Логин</label>
@@ -36,23 +36,23 @@
             </div>
         </div>
     }
-    <div class="row" style="margin:40px 0px 50px 0px">
+    <div class="row" style="margin:50px 0px 45px 0px">
         <div class="col s8 z-depth-5 offset-s2 white" style="padding:0px;">
                 @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", name = "MainForm" }))
                 {
                     @Html.AntiForgeryToken()
-                    <div class="dark-amber">
-                        <h4>Или расскажите о себе</h4>
+                    <div class="teal white-text">
+                        <h4  style="margin-top:0px;margin-bottom:0px;padding:10px;">Или расскажите о себе</h4>
                     </div>
                     <div style="padding:0px 10px 0px 10px">
                         <h5>Выберите род деятельности:</h5>
                         <div class="row">
                             <div class="col s12">
                                 <ul class="tabs teal-text" style="height:100px;">
-                                    <li class="tab col s3" style="line-height:inherit; height:inherit;"><a class="teal-text" onclick="changeActivity(0)" style="cursor:pointer"><i class="material-icons medium teal-text">school</i><br />Школьник</a></li>
-                                    <li class="tab col s3" style="line-height:inherit; height:inherit;"><a style="cursor:pointer" class="teal-text active" onclick="changeActivity(1)"><i class="material-icons medium">account_balance</i><br />Студент</a></li>
-                                    <li class="tab col s3" style="line-height:inherit; height:inherit;"><a style="cursor:pointer" class="teal-text" onclick="changeActivity(2)"><i class="material-icons medium">work</i><br />Рабочий</a></li>
-                                    <div class="indicator teal" style="z-index:1"> </div>
+                                    <li class="tab col s3" style="line-height:inherit; height:inherit;"><a class="amber-text" onclick="changeActivity(0)" style="cursor:pointer"><i class="material-icons medium">school</i><br />Школьник</a></li>
+                                    <li class="tab col s3" style="line-height:inherit; height:inherit;"><a style="cursor:pointer" class="amber-text active" onclick="changeActivity(1)"><i class="material-icons medium">account_balance</i><br />Студент</a></li>
+                                    <li class="tab col s3" style="line-height:inherit; height:inherit;"><a style="cursor:pointer" class="amber-text" onclick="changeActivity(2)"><i class="material-icons medium">work</i><br />Рабочий</a></li>
+                                    <div class="indicator amber" style="z-index:1"> </div>
                                 </ul>
                                 <select hidden name="Activity">
                                     <option value="Scoolboy"></option>

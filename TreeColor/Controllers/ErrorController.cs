@@ -6,7 +6,8 @@ using System.Web.Mvc;
 
 namespace TreeColor.Controllers
 {
-    public class ErrorController : Controller
+    [AllowAnonymous]
+    public class ErrorController : BaseController
     {
         // GET: Error
         public ActionResult Index()

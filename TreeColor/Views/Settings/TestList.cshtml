@@ -4,11 +4,14 @@
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 
-<div class="row" style="margin-top:75px;">
+<div class="row" style="margin:75px 0px 75px 0px;">
     <div class="col s8 z-depth-5 offset-s2">
         <div class="row">
-            <div class="col s10">
+            <div class="col s3">
                 @Html.ActionLink("Назад к тестированию", "LogOff", "Account", null, new { @class = "btn btn-default amber black-text", style = "margin-top:15px;" })
+            </div>
+            <div class="col s7">
+                @Html.ActionLink("Загрузить Excel", "LoadExcel", "Report", null, new { @class = "btn btn-default amber black-text", style = "margin-top:15px;" })
             </div>
             <div class="col s2">
                 @Html.ActionLink("Создать тест", "CreateTest", "Settings", null, new { @class = "btn btn-default amber black-text", style = "margin-top:15px;" })

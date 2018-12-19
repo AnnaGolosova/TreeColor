@@ -12,15 +12,19 @@
     <title>TreeColor</title>
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper teal darken-3" style="padding-left:10px;">
-            <a href="#!" class="brand-logo">ThreeColor</a>
+    <div class="wrapper">
+        <div class="body">
+            <nav class="teal darken-3">
+                <a href="#!" class="brand-logo">ThreeColor</a>
+            </nav>
+            @RenderBody()
         </div>
-    </nav>
-    @RenderBody()
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="~/Scripts/materialize.min.js"></script>
-    @RenderSection("Scripts", false)
-   
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="~/Scripts/materialize.min.js"></script>
+        @RenderSection("Scripts", false)
+        <footer class="page-footer teal">
+            @Html.Action("ForDevelopers", "Home")
+        </footer>
+    </div>
 </body>
 </html>

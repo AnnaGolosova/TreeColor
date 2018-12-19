@@ -57,7 +57,7 @@ namespace TreeColor.Utils
                     {
                         if (response.StatusCode == HttpStatusCode.Unauthorized)
                         {
-                            string token = await HttpUtil.GetToken();
+                            string token = HttpUtil.GetToken().Result;
                             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
                         }
@@ -282,7 +282,7 @@ namespace TreeColor.Utils
 
             foreach (KeyValuePair<string, IEnumerable<string>> header in req.Headers)
             {
-                clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                clone.Headers.Add(header.Key, header.Value);
             }
 
             return clone;

@@ -3,7 +3,7 @@
 ThreeColor.Data.Models.Tests test = new ThreeColor.Data.Models.Tests();
 Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
-<div class="row" style="margin-top:75px;">
+<div class="row" style="margin:75px 0px 75px 0px;">
    <div class="col s8 z-depth-5 offset-s2">
        <div class="row">
            <div class="col s10">
@@ -12,7 +12,7 @@ Layout = "~/Views/Shared/_LoginLayout.cshtml";
            @if (ViewBag.NewTest == null || ViewBag.NewTest == false)
             {
                <div class="col s2" style="margin-top:17px;">
-                   @Html.ActionLink("Удалить тест", "DeleteTest", "Settings", new { testId = Model.Id }, new { @class = "waves-effect waves-light btn black-text dark-amber", style = "color : #ffffff;" })
+                   @Html.ActionLink("Удалить тест", "DeleteTest", "Settings", new { testId = Model.Id }, new { @class = "waves-effect waves-light btn black-text red lighten-1", style = "color : #ffffff;" })
                </div>
            }
        </div>
